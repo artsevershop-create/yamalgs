@@ -238,8 +238,9 @@
     });
   }
 
-  // ---------- Подвал: слово поднимается ----------
-  const word = document.querySelector('.ftr__word > span');
+  // ---------- Подвал: слово поднимается, подпись выезжает ----------
+  const word = document.querySelector('.ftr__word .lw__name');
+  gsap.from('.ftr__word .lw__tag', { opacity: 0, x: -16, duration: 0.8, delay: 0.5, ease: 'power3.out', scrollTrigger: { trigger: '.ftr__word', start: 'top 95%', once: true } });
   if (word) SplitText.create(word, { type: 'chars', charsClass: 'ch', onSplit: self => gsap.from(self.chars, { yPercent: 60, opacity: 0, stagger: 0.03, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: word, start: 'top 95%', once: true } }) });
 
   // ---------- Счётчики ----------
