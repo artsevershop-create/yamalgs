@@ -258,8 +258,17 @@
 
     function targets() {
       // три ромба логотипа, нарисованные во внеэкранный холст и разобранные на точки
-      const s = mobile ? Math.min(W * .2, 90) : Math.min(H * .19, W * .095);
-      const cx = mobile ? W * .5 : W * .77, cy = mobile ? H * .26 : H * .48;
+      let s = mobile ? Math.min(W * .2, 90) : Math.min(H * .19, W * .095);
+      let cx = mobile ? W * .5 : W * .77, cy = mobile ? H * .26 : H * .48;
+      if (mobile) {
+        // логотип — в свободной полосе между шапкой и заголовком, чтобы не ложился на текст (высота знака ≈ 2,44·s)
+        const cr = cv.getBoundingClientRect(), title = cv.parentElement.querySelector('.hv__title');
+        const top = (document.querySelector('.hdr')?.offsetHeight || 64) + 12;
+        const bottom = title ? title.getBoundingClientRect().top - cr.top - 16 : H * .5;
+        const room = bottom - top;
+        s = Math.max(14, Math.min(s, room / 2.44));
+        cy = top + 1.184 * s + Math.max(0, room - 2.44 * s) / 2;
+      }
       const off = document.createElement('canvas'); off.width = W; off.height = H;
       const o = off.getContext('2d');
       const dia = (x, y, col) => { o.save(); o.translate(x, y); o.rotate(Math.PI / 4); o.fillStyle = col; o.fillRect(-s / 2, -s / 2, s, s); o.restore(); };

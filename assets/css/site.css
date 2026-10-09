@@ -410,3 +410,7 @@ html.a11y .cmp :is(.cmp__note, .cmp__count, .cmp__list li) { color: #fff; }
 .intro__word.lw, .preload__word.lw { justify-items: center; }
 .intro__word .lw__tag, .preload__word .lw__tag { font-size: .56em; }
 html.a11y .lw__tag { color: inherit; }
+/* ровные сетки инфографики: 4 карточки — 2 × 2, 6 карточек — 3 × 2 */
+.ig:has(> li:nth-child(4):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ig:has(> li:nth-child(6):last-child) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 700px) { .ig:has(> li:nth-child(6):last-child) { grid-template-columns: 1fr; } }
