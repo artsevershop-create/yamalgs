@@ -15,10 +15,17 @@
   // ---------- сменяющееся слово ----------
   function rotator() {
     const rot = document.querySelector('.rot');
-    if (!rot || calm()) { document.querySelectorAll('.rot__w--next').forEach(n => n.remove()); return; }
+    if (!rot) return;
     const words = rot.dataset.words.split('|');
     const [cur, next] = rot.querySelectorAll('.rot__w');
     let i = 0;
+    // в версии для слабовидящих — весь перечень сразу; при «уменьшении движения» — смена без сдвига, плавной прозрачностью
+    if (root.classList.contains('a11y')) { next.remove(); cur.textContent = words.join(', '); rot.style.whiteSpace = 'normal'; return; }
+    if (calm()) {
+      next.remove(); cur.style.transition = 'opacity .5s';
+      setInterval(() => { cur.style.opacity = 0; setTimeout(() => { i = (i + 1) % words.length; cur.textContent = words[i]; cur.style.opacity = 1; }, 500); }, 4000);
+      return;
+    }
     const swap = () => {
       i = (i + 1) % words.length;
       next.textContent = words[i];

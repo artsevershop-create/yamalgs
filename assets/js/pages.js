@@ -66,15 +66,16 @@
     const box = el => { let x = 0, y = 0, n = el; while (n && n !== org) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; } return { left: x, top: y, width: el.offsetWidth, height: el.offsetHeight, bottom: y + el.offsetHeight }; };
     const draw = () => {
       const r = { width: org.offsetWidth, height: org.offsetHeight };
+      // общество → генеральный директор и дочернее общество; директор → три направления
+      const fork = (from, to) => {
+        const x = from.left + from.width / 2, y = from.bottom, mid = y + (to[0].top - y) / 2;
+        return to.map(c => `M${x} ${y} V${mid} H${c.left + c.width / 2} V${c.top} `).join('');
+      };
       const top = box(org.querySelector('.org__node--top'));
-      const cols = [...org.querySelectorAll('.org__col > .org__node:first-child')].map(box);
+      const dir = box(org.querySelector('.org__node--dir'));
       const child = box(org.querySelector('.org__node--child'));
-      const tx = top.left + top.width / 2, ty = top.bottom;
-      const midY = ty + (cols[0].top - ty) / 2;
-      let d = '';
-      cols.forEach(c => { const cx = c.left + c.width / 2; d += `M${tx} ${ty} V${midY} H${cx} V${c.top} `; });
-      const last = box(org.querySelector('.org__row--3'));
-      d += `M${tx} ${last.bottom} V${child.top}`;
+      const cols = [...org.querySelectorAll('.org__row--units .org__col > .org__node:first-child')].map(box);
+      const d = fork(top, [dir, child]) + fork(dir, cols);
       svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
       svg.innerHTML = `<path d="${d}"/>`;
       const p = svg.querySelector('path'); const len = p.getTotalLength();

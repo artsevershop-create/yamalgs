@@ -7,6 +7,7 @@
   --frost: #8FA3B8;      /* вторичный текст, линии */
   --blue: #4A72F0;       /* синий ромб логотипа */
   --red: #EE3A2E;        /* красный ромб логотипа — маршрут и действие */
+  --red-text: #C8261B;   /* красный для мелкого текста на светлом фоне — контраст не ниже 4,5 */
 
   --f-display: "Unbounded", "Arial Black", sans-serif;
   --f-text: "Onest", "Segoe UI", Arial, sans-serif;
@@ -35,7 +36,7 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 2px; }
 
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.skip { position: absolute; left: 16px; top: -60px; z-index: 100; background: var(--red); color: #fff; padding: 10px 16px; }
+.skip { position: absolute; left: 16px; top: -60px; z-index: 100; background: var(--red-text); color: #fff; padding: 10px 16px; }
 .skip:focus { top: 12px; }
 .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 
@@ -178,7 +179,12 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 .m-town.is-minor text { font-size: 11px; fill: #C9D4DF; }
 .m-town.is-minor circle { stroke-width: 1.3; }
 .m-wlabel { fill: #4D74A6; font: italic 400 13px var(--f-text); letter-spacing: .02em; }
-.m-origin { fill: var(--frost); font: 400 12px var(--f-text); }
+.m-origin { fill: #C9D4DF; font: 400 13px var(--f-text); }
+.m-origin text { paint-order: stroke; stroke: var(--night); stroke-width: 4px; stroke-linejoin: round; }
+.m-origin__t { fill: var(--ice); font-weight: 500; }
+.m-origin__arrow { fill: none; stroke: var(--red); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.m-rail { fill: none; stroke: var(--ice); stroke-width: 2; stroke-dasharray: 7 5; opacity: .85; }
+.m-wagon { fill: var(--ice); }
 
 /* ===== About ===== */
 .about { padding: clamp(96px, 16vh, 180px) 0 clamp(80px, 12vh, 140px); }
@@ -195,8 +201,10 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
   border-top: 1px solid rgba(19, 32, 47, .15);
   padding-top: 24px;
 }
+.facts__ico { display: block; width: 44px; height: 44px; margin-bottom: 18px; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.facts__ico .ac { stroke: var(--red); }
 .facts dt { font-size: 14px; color: #5B6B7C; margin-bottom: 6px; }
-.facts dd { margin: 0; font: 400 clamp(22px, 2.2vw, 32px)/1.1 var(--f-display); letter-spacing: -.02em; }
+.facts dd { margin: 0; font: 400 clamp(22px, 2vw, 30px)/1.1 var(--f-display); letter-spacing: -.02em; }
 .facts .facts__sub { font: 400 15px/1.4 var(--f-text); color: #5B6B7C; margin-top: 6px; letter-spacing: 0; }
 
 /* Северный завоз в цифрах */
@@ -237,6 +245,7 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 .base { background: var(--night); color: var(--ice); padding-bottom: clamp(80px, 12vh, 140px); }
 .base__media { height: 100vh; height: 100svh; position: relative; overflow: hidden; }
 .base__clip { position: absolute; inset: 0; clip-path: inset(14% 18% 14% 18%); will-change: clip-path; }
+.base__clip::after { content: ""; position: absolute; inset: auto 0 0 0; height: 30%; background: linear-gradient(transparent, rgba(14, 25, 41, .7)); pointer-events: none; }
 .base__clip img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.18); filter: saturate(.9) contrast(1.04); }
 .base__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px 72px; padding-top: clamp(64px, 10vh, 120px); padding-bottom: clamp(64px, 10vh, 120px); }
 .base__intro .sec-title { margin-bottom: 28px; max-width: 16ch; }
@@ -312,7 +321,9 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
   .cargo__list li { grid-template-columns: 1fr; gap: 6px; font-size: 14px; margin-bottom: 8px; }
   .cargo__num { text-align: left; }
   .m-route { stroke-width: 4; }
-  .m-wlabel, .m-grid text, .m-circle-t, .m-origin { display: none; }
+  .m-wlabel, .m-grid text, .m-circle-t { display: none; }
+  .m-origin { font-size: 20px; }
+  .m-origin text { stroke-width: 6px; }
   .voyage__panel { align-items: flex-end; padding-bottom: 48px; }
   .facts { grid-template-columns: repeat(2, 1fr); row-gap: 32px; }
   .work__row a { grid-template-columns: 1fr; gap: 12px; }
@@ -335,6 +346,7 @@ html.a11y *, html.a11y *::before, html.a11y *::after { transition: none !importa
 html.a11y .voyage, html.a11y .base, html.a11y .ftr, html.a11y .mnav { background: #000; color: #fff; }
 html.a11y html.a11y .voyage__steps p:not(.step__n), html.a11y .base__intro p,
 html.a11y .park p, html.a11y .ftr address, html.a11y .ftr__nav a, html.a11y .specs dt { color: #fff; }
+html.a11y .facts__ico, html.a11y .facts__ico .ac { stroke: #000; }
 html.a11y .work__row p, html.a11y .facts dt, html.a11y .facts .facts__sub, html.a11y .cargo__t, html.a11y .cargo__note, html.a11y .news__list time, html.a11y .partners__t { color: #000; }
 html.a11y .cargo__bar i { transform: scaleX(var(--v)) !important; }
 html.a11y .base__daily { border-color: #fff; }

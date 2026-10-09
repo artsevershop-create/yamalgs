@@ -165,9 +165,18 @@
     const circleT = el('text', { class: 'm-circle-t', x: 954, y: yc - 8, 'text-anchor': 'end' }, svg);
     circleT.textContent = 'Северный полярный круг';
 
-    const [ox, oy] = P([65.4, 62.75]);
-    const origin = el('text', { class: 'm-origin', x: ox + 14, y: oy - 6 }, svg);
-    origin.textContent = 'с заводов в Омске и Сургуте';
+    // откуда идут грузы: топливо по воде с юга (Омск, Сургут), уголь и дрова по железной дороге с запада в Лабытнанги
+    const origin = el('g', { class: 'm-origin' }, svg);
+    const [ox, oy] = P([65.0, 64.12]);
+    el('path', { class: 'm-origin__arrow', d: `M${ox - 8} ${oy + 22} l8 -12 l8 12` }, origin);
+    const ot = el('text', { x: ox + 18, y: oy + 4 }, origin);
+    el('tspan', { class: 'm-origin__t' }, ot).textContent = 'Топливо по воде';
+    el('tspan', { x: ox + 18, dy: '1.3em' }, ot).textContent = 'из Омска и Сургута';
+    const rail = el('path', { class: 'm-rail', d: smooth([[60.5, 66.98], [63.5, 67.02], [64.6, 67.02], [65.3, 66.92], [65.8, 66.8], [66.4, 66.66]]) }, origin);
+    const [rx, ry] = P([64.05, 67.06]);
+    const rt = el('text', { x: rx, y: ry - 30 }, origin);
+    el('tspan', { class: 'm-origin__t' }, rt).textContent = 'Уголь, дрова по ж/д';
+    el('tspan', { x: rx, dy: '1.3em' }, rt).textContent = 'в Лабытнанги';
 
     const routeG = el('g', {}, svg);
     const legs = LEGS.map(l => {
@@ -186,19 +195,16 @@
       const [x, y] = P([lon, lat]);
       const g = el('g', { class: 'm-town' + (hub ? ' is-hub' : '') + (minor ? ' is-minor' : ''), 'data-name': name }, townsG);
       el('circle', { cx: x, cy: y, r: hub ? 6 : minor ? 3.5 : 4.5 }, g);
+      el('title', {}, g).textContent = name;
       const off = hub ? 12 : minor ? 8 : 10;
-      const pos = {
+      const spots = {
         r: [x + off, y + 4, 'start'], l: [x - off, y + 4, 'end'],
         t: [x, y - off - 2, 'middle'], b: [x, y + off + 12, 'middle'],
         tl: [x - off, y - off + 2, 'end'], bl: [x - off, y + off + 8, 'end'],
-        tr: [x + off, y - off + 2, 'start']
-      }[side];
-      if (pos) {
-        const t = el('text', { x: pos[0], y: pos[1], 'text-anchor': pos[2] }, g);
-        t.textContent = name;
-      } else {
-        el('title', {}, g).textContent = name;
-      }
+        tr: [x + off, y - off + 2, 'start'], br: [x + off, y + off + 8, 'start']
+      };
+      let label = null;
+      if (side !== 'x') { label = el('text', {}, g); label.textContent = name; }
       // момент появления — когда маршрут проходит ближайшую к пункту точку
       const leg = legs.find(l => l.id === legId);
       let at = 0;
@@ -212,10 +218,37 @@
         at = leg.w[0] + (leg.w[1] - leg.w[0]) * best;
       }
       g.style.opacity = 0;
-      return { g, at, shown: false, name, x, y };
+      return { g, at, shown: false, name, x, y, hub, minor, side, spots, label };
     });
 
-    return { legs, towns, rivers, water, grid, circle, circleT, origin, head, glow, project: P };
+    // подписи без наложений: узлы первыми, затем основные пункты, затем мелкие;
+    // каждая пробует свою сторону, потом остальные; мелкой без места — только всплывающая подсказка
+    const pad = 3, hit = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+    const rank = t => t.hub ? 0 : t.minor ? 2 : 1;
+    const placeLabels = () => {
+      const taken = towns.map(t => { const r = t.hub ? 6 : 4; return { x: t.x - r, y: t.y - r, width: r * 2, height: r * 2 }; });
+      [ot, rt].forEach(n => taken.push(n.getBBox()));
+      const vb = svg.viewBox.baseVal, inView = r => !vb || !vb.width || (r.x >= vb.x && r.x + r.width <= vb.x + vb.width && r.y >= vb.y && r.y + r.height <= vb.y + vb.height);
+      towns.filter(t => t.label).sort((a, b) => rank(a) - rank(b)).forEach(t => {
+        const order = [t.side, 'r', 'l', 't', 'b', 'tr', 'br', 'tl', 'bl'].filter((s, i, a) => t.spots[s] && a.indexOf(s) === i);
+        const put = s => { const [lx, ly, anchor] = t.spots[s]; t.label.setAttribute('x', lx); t.label.setAttribute('y', ly); t.label.setAttribute('text-anchor', anchor); };
+        t.label.style.display = '';
+        let box = null;
+        for (const s of order) {
+          put(s);
+          const b = t.label.getBBox(), r = { x: b.x - pad, y: b.y - pad, width: b.width + pad * 2, height: b.height + pad * 2 };
+          if (!b.width || (inView(r) && !taken.some(q => hit(q, r)))) { box = r; break; }
+        }
+        if (box) taken.push(box);
+        else if (t.minor) t.label.style.display = 'none';
+        else { put(t.side); taken.push(t.label.getBBox()); }
+      });
+    };
+    placeLabels();
+    // ширина подписей зависит от шрифта — после его загрузки раскладываем заново
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeLabels);
+
+    return { legs, towns, rivers, water, grid, circle, circleT, origin, rail, head, glow, placeLabels, project: P };
   }
 
   window.YMap = {

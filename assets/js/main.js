@@ -12,6 +12,7 @@
   const countEl = document.getElementById('mapCount');
   const map = window.YMap.init(mapSvg, n => { countEl.textContent = n; });
   const meta = document.querySelector('.map__meta');
+  narrow.addEventListener('change', () => map.placeLabels());
 
   // прогресс прокрутки секции → прогресс маршрута (панели: вступление, 1–4)
   const routeT = p => {
@@ -45,7 +46,27 @@
     draw.fromTo(r, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 2, ease: 'power2.inOut' }, 0.3 + i * 0.15);
   });
   draw.from([map.circle, map.circleT, map.origin], { opacity: 0, duration: 1 }, 1.2);
+  // вагоны медленно идут по железной дороге в Лабытнанги
+  const railLen = map.rail.getTotalLength();
+  const wagons = [0, 1, 2].map(() => { const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); r.setAttribute('class', 'm-wagon'); r.setAttribute('width', 9); r.setAttribute('height', 5); r.setAttribute('rx', 1); map.origin.appendChild(r); return r; });
+  const rideState = { t: 0 };
+  const placeWagons = () => wagons.forEach((w, i) => {
+    const d = Math.max(0, rideState.t * railLen - i * 12), a = map.rail.getPointAtLength(d), b = map.rail.getPointAtLength(Math.min(railLen, d + 1));
+    w.setAttribute('transform', `translate(${a.x} ${a.y}) rotate(${Math.atan2(b.y - a.y, b.x - a.x) * 57.3}) translate(-4.5 -2.5)`);
+    w.style.opacity = rideState.t > .97 ? (1 - rideState.t) / .03 : Math.min(1, rideState.t * 20);
+  });
+  placeWagons();
+  draw.add(gsap.to(rideState, { t: 1, duration: 18, ease: 'none', repeat: -1, repeatDelay: 3, onUpdate: placeWagons }), 2);
   ScrollTrigger.create({ trigger: '.voyage', start: 'top 70%', once: true, onEnter: () => draw.play() });
+
+  // ---------- Значки у цифр: линии прорисовываются по очереди ----------
+  const icoLines = gsap.utils.toArray('.facts__ico :is(path, circle):not([stroke-dasharray])');
+  icoLines.forEach(l => { const len = Math.ceil(l.getTotalLength()); gsap.set(l, { strokeDasharray: len, strokeDashoffset: len }); });
+  gsap.set('.facts__ico [stroke-dasharray]', { opacity: 0 });
+  ScrollTrigger.create({ trigger: '.facts', start: 'top 85%', once: true, onEnter: () => {
+    gsap.to(icoLines, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut', stagger: 0.06 });
+    gsap.to('.facts__ico [stroke-dasharray]', { opacity: 1, duration: .8, delay: 1 });
+  } });
 
   ScrollTrigger.create({
     trigger: '.voyage', start: 'top top', end: 'bottom bottom', scrub: 0.8,
