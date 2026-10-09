@@ -33,6 +33,10 @@
   const scheme = document.getElementById('scheme');
   if (scheme) {
     const tip = document.getElementById('schemeTip');
+    // список объектов под схемой — на телефоне точки мелкие, описания читаются списком
+    const legend = document.createElement('ol'); legend.className = 'scheme__legend';
+    legend.innerHTML = [...scheme.querySelectorAll('.scheme__pt')].map(b => `<li><b>${b.textContent}</b><span>${b.dataset.tip}</span></li>`).join('');
+    scheme.after(legend);
     let active = null;
     scheme.addEventListener('click', e => {
       const b = e.target.closest('.scheme__pt');

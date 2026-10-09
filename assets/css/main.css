@@ -333,7 +333,13 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
   .m-wlabel, .m-grid text, .m-circle-t { display: none; }
   .m-origin { font-size: 20px; }
   .m-origin text { stroke-width: 6px; }
-  .voyage__panel { align-items: flex-end; padding-bottom: 48px; }
+  .voyage__panel { align-items: flex-end; padding-bottom: 32px; }
+  .panel__inner { width: 100%; background: rgba(15, 27, 45, .9); border: 1px solid rgba(143, 163, 184, .2); border-radius: 14px; padding: 20px 18px 22px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .voyage__panel .step__n { margin-bottom: 14px; }
+  .voyage__panel .step__title { margin-bottom: 12px; }
+  .voyage__panel .ig--compact { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .voyage__panel { z-index: 3; }
+  .voyage__panel .ig--compact .ig__item { background: rgba(238, 242, 244, .04); }
   .facts { grid-template-columns: repeat(2, 1fr); row-gap: 32px; }
   .work__row a { grid-template-columns: 1fr; gap: 12px; }
   .peek { display: none; }

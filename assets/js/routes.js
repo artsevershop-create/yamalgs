@@ -67,7 +67,8 @@
       const [x, y] = T(t.p); if (x < 10 || x > W - 10 || y < 60 || y > H - 20) return;
       const [dx, dy, align] = LABEL[t.n] || [7, 4, 'left'];
       b.fillStyle = 'rgba(238,242,244,.75)'; b.fillRect(x - 2, y - 2, 4, 4);
-      b.fillStyle = 'rgba(238,242,244,.5)'; b.textAlign = align; b.fillText(t.n, x + dx, y + dy);
+      // на телефоне подписи городов не выводим — они ложатся на логотип и заголовок
+      if (!mobile) { b.fillStyle = 'rgba(238,242,244,.5)'; b.textAlign = align; b.fillText(t.n, x + dx, y + dy); }
     });
     b.textAlign = 'left';
 

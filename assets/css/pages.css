@@ -120,3 +120,14 @@ html.a11y .calc, html.a11y .calc__out, html.a11y .org__node { background: #000; 
 html.a11y .svc__item { border: 1px solid #000; }
 html.a11y .svc p { color: inherit; }
 html.a11y .svc__ico svg, html.a11y .svc__ico svg .ac { stroke: #000; }
+
+/* схема базы на телефоне: мелкие точки и список объектов под планом */
+.scheme__legend { display: none; }
+@media (max-width: 700px) {
+  .scheme__pt { width: 18px; height: 18px; font-size: 10px; animation: none; box-shadow: 0 0 0 2px rgba(255, 255, 255, .85); }
+  .scheme__tip { display: none !important; }
+  .scheme__legend { display: grid; gap: 12px; list-style: none; margin: 18px 0 0; padding: 0; }
+  .scheme__legend li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 12px; align-items: start; font-size: 15px; line-height: 1.45; color: #C9D4DF; }
+  .scheme__legend b { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--red-text); color: #fff; font: 500 12px var(--f-display); }
+}
+html.a11y .scheme__legend li { color: inherit; }

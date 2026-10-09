@@ -134,6 +134,7 @@ html.pre-on .preload {
 
 /* ---------- Фон hero: карта и движение по маршрутам ---------- */
 .routes { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: .45; }
+@media (max-width: 899px) { .routes { opacity: .3; } }
 .hv--snow .snow { z-index: 2; }
 .hv--snow .hv__wrap { z-index: 3; }
 .hv--snow .hv__vignette { z-index: 2; }
