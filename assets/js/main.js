@@ -71,11 +71,22 @@
     trigger: '.voyage', start: 'top top', end: 'bottom bottom', scrub: 0.8,
     onUpdate: s => { const t = routeT(s.progress); map.setProgress(t); meta.classList.toggle('is-on', t > 0.02); }
   });
+  // на компьютере текст шага закреплён в левой колонке на всё время шага (без пустых экранов),
+  // проявляется в начале и гаснет в самом конце; на телефоне — прежнее поведение
+  const wide = matchMedia('(min-width: 861px)').matches;
   gsap.utils.toArray('.voyage__steps .panel__inner').forEach(p => {
-    gsap.timeline({ scrollTrigger: { trigger: p, start: 'top 85%', end: 'bottom 15%', scrub: true } })
-      .fromTo(p, { opacity: 0, y: 60 }, { opacity: 1, y: 0, ease: 'none', duration: 0.35 })
-      .to(p, { opacity: 1, duration: 0.3 })
-      .to(p, { opacity: 0, y: -40, ease: 'none', duration: 0.35 });
+    const panel = p.closest('.voyage__panel');
+    if (wide) {
+      gsap.timeline({ scrollTrigger: { trigger: panel, start: 'top 70%', end: 'bottom 30%', scrub: true } })
+        .fromTo(p, { opacity: 0, y: 50 }, { opacity: 1, y: 0, ease: 'none', duration: 0.15 })
+        .to(p, { opacity: 1, duration: 0.7 })
+        .to(p, { opacity: 0, y: -30, ease: 'none', duration: 0.15 });
+    } else {
+      gsap.timeline({ scrollTrigger: { trigger: p, start: 'top 85%', end: 'bottom 15%', scrub: true } })
+        .fromTo(p, { opacity: 0, y: 60 }, { opacity: 1, y: 0, ease: 'none', duration: 0.35 })
+        .to(p, { opacity: 1, duration: 0.3 })
+        .to(p, { opacity: 0, y: -40, ease: 'none', duration: 0.35 });
+    }
   });
 
   // ---------- О компании: текст проявляется по словам ----------

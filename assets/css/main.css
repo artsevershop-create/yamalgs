@@ -151,6 +151,11 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
   padding: var(--hdr-h) var(--gutter) 40px;
 }
 .panel__inner { max-width: 520px; }
+@media (min-width: 861px) {
+  .voyage__panel { align-items: flex-start; min-height: 115vh; min-height: 115svh; }
+  .panel__inner { position: sticky; top: calc(var(--hdr-h) + 10vh); }
+  .voyage__panel .ig--compact { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 480px; }
+}
 
 .step__n {
   width: 44px; height: 44px; display: grid; place-items: center;
