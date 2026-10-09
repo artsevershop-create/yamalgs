@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Жадовский Владимир Александрович",
+    "position": "Генеральный директор",
+    "phone": "+7 (34922) 3-15-51",
+    "email": "ygs@yamalgs.ru",
+    "unit": "Генеральный директор",
+    "photo": "files/staff/ukfemwqlnlo61ae5xnui7xdw61du79m2.jpg"
+  },
+  {
+    "name": "Швагер Олеся Владимировна",
+    "position": "Первый заместитель генерального директора",
+    "phone": "",
+    "email": "shvager@yamalgs.ru",
+    "unit": "Первый заместитель генерального директора",
+    "photo": null
+  },
+  {
+    "name": "Мурашов Александр Владимирович",
+    "position": "Заместитель генерального директора",
+    "phone": "+7 (34922) 3-15-51",
+    "email": "murashov@yamalgs.ru",
+    "unit": "Заместитель генерального директора",
+    "photo": "files/staff/lv5kgz6uo2rtrfm3p7judubottz2v52h.jpg"
+  },
+  {
+    "name": "Гусева Юлия Владимировна",
+    "position": "Главный бухгалтер",
+    "phone": "",
+    "email": "+7 (34922) 3-34-55",
+    "unit": "Управление бухгалтерского учета и отчетности",
+    "photo": "files/staff/gclp3sx0bon88lnpy9s5yzkik9imxer6.jpeg"
+  },
+  {
+    "name": "Ветров Антон Витальевич",
+    "position": "Начальник управления правового обеспечения и государственных закупок",
+    "phone": "+7 (34922) 3-34-63",
+    "email": "vetrov@yamalgs.ru",
+    "unit": "Управление правового обеспечения",
+    "photo": "files/staff/wczddt2fiximmee8hhm382hwrjvu8o0k.jpg"
+  },
+  {
+    "name": "Канчура Анатолий Аркадьевич",
+    "position": "Начальник управления поставок и реализации топливно-энергетических ресурсов",
+    "phone": "+7 (34922) 3-34-62",
+    "email": "kanchura@yamalgs.ru",
+    "unit": "Управление поставок и реализации ТЭР",
+    "photo": "files/staff/953dvpgreat64pgb802jjia2hltl564a.jpg"
+  },
+  {
+    "name": "Макарова Ирина Николаевна",
+    "position": "Начальник планово-экономического управления",
+    "phone": "+7 (34922) 3-34-55",
+    "email": "makarova@yamalgs.ru",
+    "unit": "Планово-экономическое управление",
+    "photo": "files/staff/bx024rsdqyxsmse5aunq00un601bubin.jpg"
+  },
+  {
+    "name": "Пустовалов Сергей Александрович",
+    "position": "Начальник отдела кадровой и организационной работы",
+    "phone": "+7 (34922) 3-34-55",
+    "email": "pustovalov@yamalgs.ru",
+    "unit": "Отдел кадровой и организационной работы",
+    "photo": null
+  }
+]

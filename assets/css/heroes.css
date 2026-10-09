@@ -1,0 +1,145 @@
+/* ===== Варианты первого экрана (черновики для выбора) ===== */
+.hvpage .ftr { display: none; }
+
+/* ---------- общее ---------- */
+.hv {
+  position: relative; min-height: 100svh; overflow: hidden;
+  background: radial-gradient(ellipse 80% 70% at 75% 45%, #16294A 0%, var(--night) 62%);
+  color: var(--ice); display: flex; align-items: center;
+  padding-top: var(--hdr-h);
+}
+.hv__wrap { position: relative; z-index: 3; padding-top: 40px; padding-bottom: 120px; }
+.hv__coord { font-size: 13px; letter-spacing: .08em; color: var(--frost); margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
+.hv__coord::before { content: ""; width: 28px; height: 1px; background: var(--red); }
+.hv__title { font: 400 clamp(38px, 5.2vw, 86px)/.98 var(--f-display); letter-spacing: -.04em; margin-bottom: 28px; }
+.hv__ln { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
+.hv__ln > span { display: block; }
+.hv__lead { max-width: 30em; font-size: clamp(17px, 1.3vw, 20px); color: #C9D4DF; margin-bottom: 32px; }
+.hv__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.rot { display: inline-grid; grid-template-columns: 1fr; vertical-align: top; overflow: hidden; color: var(--red); white-space: nowrap; }
+.rot__w { grid-area: 1 / 1; font-weight: inherit; }
+.rot__w--next { transform: translateY(105%); }
+
+/* переключатель вариантов */
+.hswitch {
+  position: fixed; left: 50%; bottom: 18px; z-index: 80; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 4px; padding: 6px; border-radius: 999px;
+  background: rgba(15, 27, 45, .82); border: 1px solid rgba(238, 242, 244, .16);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); font-size: 13px; color: var(--ice);
+  max-width: calc(100vw - 32px); overflow-x: auto;
+}
+.hswitch__t { padding: 0 10px 0 12px; color: var(--frost); white-space: nowrap; }
+.hswitch a { padding: 8px 14px; border-radius: 999px; text-decoration: none; white-space: nowrap; color: var(--ice); }
+.hswitch a:hover { background: rgba(238, 242, 244, .1); }
+.hswitch a[aria-current] { background: var(--ice); color: var(--night); }
+
+/* ---------- 1. Полярный радар ---------- */
+.radar { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+.hv__vignette { position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(90deg, var(--night) 0%, rgba(15, 27, 45, .85) 26%, rgba(15, 27, 45, 0) 52%); }
+.radar__legend { position: absolute; right: var(--gutter); bottom: 96px; z-index: 3; display: grid; gap: 8px; font-size: 13px; color: var(--frost); }
+.radar__legend li { display: flex; align-items: center; gap: 10px; }
+.lg { display: inline-block; flex: none; }
+.lg--route { width: 18px; height: 2px; background: var(--red); }
+.lg--ship { width: 8px; height: 8px; border-radius: 50%; background: #FFD27A; box-shadow: 0 0 10px #FFB23F; }
+.lg--town { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--ice); }
+.radar__readout { position: absolute; right: var(--gutter); top: calc(var(--hdr-h) + 28px); z-index: 3; font-size: 14px; color: #C9D4DF; font-variant-numeric: tabular-nums; }
+.radar__readout b { font: 400 28px var(--f-display); color: var(--ice); margin-right: 4px; }
+
+/* ---------- 2. ЯМАЛ сквозь буквы ---------- */
+.hv2 { position: relative; height: 260svh; background: var(--night); color: var(--ice); }
+.hv2__pin { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+.hv2__photo { position: absolute; inset: 0; }
+.hv2__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; transform: scale(1.15); }
+.hv2__photo::after { content: ""; position: absolute; inset: 0; opacity: var(--shade, 0);
+  background: linear-gradient(90deg, rgba(15, 27, 45, .92) 0%, rgba(15, 27, 45, .7) 40%, rgba(15, 27, 45, .15) 75%), linear-gradient(0deg, rgba(15, 27, 45, .85) 0%, rgba(15, 27, 45, 0) 45%); }
+/* слой полярной ночи с «прозрачными» буквами: белое в режиме multiply показывает фото, тёмно-синее — гасит */
+.hv2__mask {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: var(--night); mix-blend-mode: multiply; will-change: transform;
+}
+.hv2__word { white-space: nowrap; font: 700 clamp(90px, 23vw, 420px)/.8 var(--f-display); letter-spacing: -.06em; color: #fff; transform: translateY(4%); }
+.hv2__meta { position: absolute; left: var(--gutter); right: var(--gutter); top: calc(var(--hdr-h) + 24px); display: flex; justify-content: space-between; font-size: 13px; letter-spacing: .06em; color: var(--frost); z-index: 2; }
+.hv2__hint { position: absolute; left: 50%; bottom: 84px; transform: translateX(-50%); display: grid; justify-items: center; gap: 10px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--frost); z-index: 2; }
+.hv2__hint i { width: 1px; height: 44px; background: rgba(238, 242, 244, .25); position: relative; overflow: hidden; }
+.hv2__hint i::after { content: ""; position: absolute; left: 0; top: -100%; width: 100%; height: 100%; background: var(--ice); animation: hvcue 2s cubic-bezier(.65, 0, .35, 1) infinite; }
+@keyframes hvcue { 0% { top: -100%; } 60%, 100% { top: 100%; } }
+.hv2__content { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding-bottom: 120px; opacity: 0; visibility: hidden; }
+.hv2__after { background: var(--night); color: var(--ice); padding: 72px 0 140px; }
+.hv2__facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; border-top: 1px solid rgba(143, 163, 184, .3); padding-top: 24px; }
+.hv2__facts dt { font-size: 14px; color: var(--frost); margin-bottom: 6px; }
+.hv2__facts dd { margin: 0; font: 400 clamp(24px, 2.6vw, 40px)/1.05 var(--f-display); letter-spacing: -.02em; }
+
+/* ---------- 3. Снег собирается в логотип ---------- */
+.snow { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+.hv__aurora { position: absolute; inset: -20% -10% auto auto; width: 70%; height: 90%; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 60% 40%, rgba(74, 114, 240, .28), transparent 60%), radial-gradient(ellipse at 80% 60%, rgba(238, 58, 46, .14), transparent 55%);
+  filter: blur(40px); animation: aurora 14s ease-in-out infinite alternate; }
+@keyframes aurora { to { transform: translate(-6%, 8%) scale(1.1); } }
+.hv--snow .hv__wrap { pointer-events: none; }
+.hv--snow .hv__actions, .hv--snow .hv__actions a { pointer-events: auto; }
+.snow__hint { position: absolute; right: var(--gutter); bottom: 96px; z-index: 3; font-size: 13px; color: var(--frost); }
+
+/* ---------- адаптив ---------- */
+@media (max-width: 900px) {
+  .hv { align-items: flex-end; }
+  .hv__title { font-size: clamp(30px, 9.2vw, 44px); }
+  .hv__vignette { background: linear-gradient(0deg, var(--night) 0%, rgba(15, 27, 45, .9) 45%, rgba(15, 27, 45, .1) 80%); }
+  .radar__legend { display: none; }
+  .hv--radar .hv__coord { display: none; }
+  .hv--radar .hv__wrap { padding-bottom: 96px; }
+  .radar__readout { display: none; }
+  .hv2__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hv2__meta span:last-child { display: none; }
+  .snow__hint { display: none; }
+  .hv--snow .hv__coord { display: none; }
+  .hv--snow .hv__wrap { padding-bottom: 96px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hv__aurora, .hv2__hint i::after { animation: none; }
+  .hv2 { height: auto; }
+  .hv2__pin { position: relative; }
+  .hv2__mask { display: none; }
+  .hv2__content { opacity: 1; visibility: visible; }
+}
+html.a11y .hv2 { height: auto; }
+html.a11y .hv2__pin { position: relative; }
+html.a11y .hv2__mask { display: none; }
+html.a11y .hv2__content { opacity: 1 !important; visibility: visible !important; }
+html.a11y .radar, html.a11y .snow { display: none; }
+
+/* ---------- Заставка главной: логотип → карта ЯНАО → снег ---------- */
+.preload { display: none; }
+html.pre-on .preload {
+  display: grid; position: fixed; inset: 0; z-index: 210; place-items: center;
+  background: var(--night); color: var(--ice); overflow: hidden; cursor: pointer;
+}
+.preload__map { position: absolute; inset: 0; width: 100%; height: 100%; }
+.preload__logo { position: relative; z-index: 2; display: grid; justify-items: center; gap: 16px; }
+.preload__mark { width: clamp(84px, 9vw, 120px); height: auto; aspect-ratio: 100 / 80; }
+.preload__mark .mark__w { stroke: var(--frost); }
+.preload__word { font: 500 clamp(18px, 1.8vw, 24px)/1 var(--f-display); letter-spacing: -.01em; }
+.preload__caption { position: absolute; left: var(--gutter); bottom: 64px; z-index: 2; display: grid; gap: 6px; }
+.preload__region { font: 400 clamp(18px, 1.8vw, 26px)/1.15 var(--f-display); letter-spacing: -.02em; max-width: 14em; }
+.preload__count { font-size: 14px; color: var(--frost); }
+.preload__count b { color: var(--ice); font-weight: 600; font-variant-numeric: tabular-nums; }
+.preload__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgba(238, 242, 244, .08); }
+.preload__bar i { position: absolute; inset: 0; background: var(--red); transform-origin: left; transform: scaleX(0); }
+.preload__skip { position: absolute; right: var(--gutter); bottom: 56px; z-index: 2; background: none; border: 1px solid rgba(238, 242, 244, .25); color: var(--frost); font: 400 13px var(--f-text); padding: 9px 16px; border-radius: 999px; cursor: pointer; }
+.preload__skip:hover { color: var(--ice); border-color: var(--ice); }
+@media (max-width: 900px) {
+  .preload__caption { bottom: 40px; }
+  .preload__skip { bottom: auto; top: 20px; }
+}
+
+/* ---------- Фон hero: карта и движение по маршрутам ---------- */
+.routes { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: .45; }
+.hv--snow .snow { z-index: 2; }
+.hv--snow .hv__wrap { z-index: 3; }
+.hv--snow .hv__vignette { z-index: 2; }
+.routes__legend { position: absolute; right: var(--gutter); bottom: 96px; z-index: 3; display: flex; gap: 20px; font-size: 13px; color: var(--frost); }
+.routes__legend li { display: flex; align-items: center; gap: 8px; }
+.lg--rail { width: 18px; height: 0; border-top: 2px dashed #C9D4DF; }
+.lg--truck { width: 7px; height: 7px; border-radius: 1px; background: var(--red); }
+@media (max-width: 900px) { .routes__legend { display: none; } }
+html.a11y .routes { display: none; }

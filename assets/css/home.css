@@ -1,0 +1,97 @@
+/* ===== Главная: hero, бегущая строка, правки маршрута ===== */
+
+/* ---------- Hero ---------- */
+.hero2 {
+  position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end;
+  background: var(--night); color: var(--ice); overflow: hidden;
+  padding-top: var(--hdr-h);
+}
+.hero2__bg { position: absolute; inset: 0; z-index: 0; }
+.hero2__bg img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 70% 60%;
+  filter: saturate(.55) brightness(.5) contrast(1.1);
+  transform: scale(1.12); clip-path: inset(0 0 100% 0);
+}
+.hero2__bg::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, var(--night) 0%, rgba(15, 27, 45, .9) 30%, rgba(15, 27, 45, .35) 65%, rgba(15, 27, 45, .55) 100%),
+    linear-gradient(180deg, rgba(15, 27, 45, .6) 0%, rgba(15, 27, 45, 0) 35%, rgba(15, 27, 45, .2) 70%, var(--night) 100%);
+}
+.hero2__wrap { position: relative; z-index: 2; padding-bottom: clamp(32px, 6vh, 72px); padding-top: clamp(32px, 8vh, 96px); }
+.hero2__title {
+  font: 400 clamp(38px, 6.4vw, 100px)/.98 var(--f-display);
+  letter-spacing: -.04em; margin-bottom: 28px;
+}
+.hero2__ln { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
+.hero2__ln > span { display: block; }
+.rot { display: inline-grid; grid-template-columns: 1fr; vertical-align: top; overflow: hidden; color: var(--red); white-space: nowrap; }
+.rot__w { grid-area: 1 / 1; font-weight: inherit; }
+.rot__w--next { transform: translateY(105%); }
+.hero2__lead { max-width: 34em; font-size: clamp(17px, 1.3vw, 20px); color: #C9D4DF; margin-bottom: 32px; }
+.hero2__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.hero2__strip { position: relative; z-index: 2; border-top: 1px solid rgba(238, 242, 244, .14); background: rgba(15, 27, 45, .55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.hero2__strip-in { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 24px 48px; align-items: center; padding-top: 18px; padding-bottom: 18px; }
+.hero2__season { display: grid; gap: 2px; font-size: 13px; color: var(--frost); white-space: nowrap; }
+.hero2__season b { font: 500 15px var(--f-display); color: var(--ice); }
+.hero2__bars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.hero2__bars li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; align-items: center; font-size: 13px; color: #C9D4DF; }
+.hero2__bars i { grid-column: 1 / -1; display: block; height: 3px; background: rgba(238, 242, 244, .15); overflow: hidden; }
+.hero2__bars b { display: block; height: 100%; width: calc(var(--v) * 100%); background: var(--red); transform-origin: left; transform: scaleX(0); }
+.hero2__bars em { font-style: normal; font-variant-numeric: tabular-nums; color: var(--ice); font-weight: 500; }
+.hero2__map { font-size: 14px; font-weight: 500; color: var(--ice); text-decoration: none; white-space: nowrap; padding-bottom: 3px; background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; }
+.hero2__map:hover { background-size: 0 1px; }
+
+.hero2__diamonds { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+/* контуры ромбов из логотипа — тонкие, как чертёж */
+.dia { position: absolute; display: block; width: clamp(120px, 18vw, 300px); aspect-ratio: 1; transform: rotate(45deg); opacity: 0; border: 1px solid rgba(238, 242, 244, .22); }
+.dia--b { right: 24%; top: 14%; border-color: rgba(74, 114, 240, .55); }
+.dia--r { right: 8%; top: 14%; border-color: rgba(238, 58, 46, .55); }
+.dia--w { right: 16%; top: 36%; border-color: rgba(238, 242, 244, .4); }
+.dia::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px; background: currentColor; border-radius: 50%; opacity: .6; }
+
+.hero2__scroll { position: absolute; left: 50%; bottom: 112px; z-index: 3; width: 1px; height: 56px; background: rgba(238, 242, 244, .2); overflow: hidden; }
+.hero2__scroll i { position: absolute; left: 0; top: -100%; width: 100%; height: 100%; background: var(--ice); animation: scrollcue 2.2s cubic-bezier(.65, 0, .35, 1) infinite; }
+@keyframes scrollcue { 0% { top: -100%; } 60% { top: 100%; } 100% { top: 100%; } }
+
+/* ---------- Маршрут: панели поверх липкой карты ---------- */
+.voyage__steps { margin-top: -100vh; margin-top: -100svh; }
+.voyage__panel--lead .panel__inner { max-width: 560px; }
+.voyage__panel--lead .step__n { border-color: var(--frost); }
+
+/* ---------- Обской причал: подпись фото ---------- */
+.base__media { position: relative; }
+.base__caption { position: absolute; left: var(--gutter); bottom: 20px; z-index: 2; font-size: 13px; color: var(--frost); opacity: 0; }
+
+/* ---------- Бегущая строка партнёров ---------- */
+.marquee { overflow: hidden; border-top: 1px solid rgba(19, 32, 47, .12); border-bottom: 1px solid rgba(19, 32, 47, .12); padding: 26px 0; background: var(--ice); }
+.marquee__track { display: flex; gap: 64px; width: max-content; font: 400 clamp(15px, 1.3vw, 18px)/1 var(--f-display); letter-spacing: -.01em; color: #4A5868; white-space: nowrap; animation: marquee 60s linear infinite; }
+.marquee__track span { position: relative; }
+.marquee__track span::after { content: ""; position: absolute; right: -36px; top: 50%; width: 5px; height: 5px; border: 1px solid var(--red); transform: translateY(-50%) rotate(45deg); }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ---------- Адаптив ---------- */
+@media (max-width: 900px) {
+  .hero2__title { font-size: clamp(30px, 9.2vw, 44px); }
+  .hero2__bg img { object-position: 60% 50%; }
+  .hero2__strip-in { grid-template-columns: 1fr; gap: 14px; }
+  .hero2__bars { grid-template-columns: 1fr; gap: 10px; }
+  .hero2__season span { white-space: normal; }
+  .hero2__scroll { display: none; }
+  .dia { display: none; }
+  .hero2__map { justify-self: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero2__bg img { clip-path: none; transform: none; }
+  .hero2__bars b { transform: none; }
+  .dia { opacity: .7; }
+  .marquee__track { animation: none; }
+  .hero2__scroll i { animation: none; }
+}
+html.a11y .hero2__bg img { clip-path: none !important; transform: none !important; filter: grayscale(1) brightness(.4) !important; }
+html.a11y .hero2__bars b { transform: none !important; }
+html.a11y .marquee__track { animation: none; }
+html.a11y .hero2, html.a11y .hero2__strip { background: #000; }
+html.a11y .rot { color: #fff; }

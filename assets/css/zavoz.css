@@ -1,0 +1,138 @@
+/* ===== Карта завоза ===== */
+.page-zavoz { background: var(--night); color: var(--ice); }
+.page-zavoz .hdr.is-solid[data-theme="dark"] { background: rgba(15, 27, 45, .92); }
+.page-zavoz .hdr__nav a[aria-current] { opacity: 1; box-shadow: 0 1px 0 var(--red); }
+
+.zv { padding-top: calc(var(--hdr-h) + clamp(32px, 6vh, 64px)); }
+.zv__head { margin-bottom: clamp(24px, 4vh, 40px); }
+.zv__title { font: 400 clamp(32px, 4.6vw, 64px)/1.02 var(--f-display); letter-spacing: -.03em; margin-bottom: 16px; }
+.zv__lead { color: #C9D4DF; max-width: 40em; font-size: 17px; }
+.zv__total { margin-top: 18px; font: 400 clamp(18px, 1.8vw, 24px)/1.3 var(--f-display); letter-spacing: -.02em; }
+.zv__total b { color: var(--red); font-weight: 400; }
+
+.zv__layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 32px; align-items: start; }
+
+/* --- список --- */
+.zv__side { position: sticky; top: calc(var(--hdr-h) + 16px); max-height: calc(100vh - var(--hdr-h) - 32px); display: flex; flex-direction: column; }
+.zv__search input {
+  width: 100%; height: 46px; padding: 0 16px;
+  border: 1px solid rgba(143, 163, 184, .35); border-radius: 8px;
+  background: rgba(238, 242, 244, .06); color: var(--ice); font: 400 15px var(--f-text);
+}
+.zv__search input::placeholder { color: var(--frost); }
+.zv__search input:focus { outline: none; border-color: var(--ice); }
+.zv__list { overflow: auto; margin-top: 12px; padding-right: 4px; scrollbar-width: thin; scrollbar-color: rgba(143, 163, 184, .4) transparent; }
+.zv__region { border-top: 1px solid rgba(143, 163, 184, .2); }
+.zv__region-btn {
+  width: 100%; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px;
+  padding: 14px 4px; background: none; border: 0; color: var(--ice); cursor: pointer;
+  font: 500 15px var(--f-text); text-align: left;
+}
+.zv__region-btn:hover { color: #fff; }
+.zv__region-pct { color: var(--frost); font-variant-numeric: tabular-nums; font-size: 13px; }
+.zv__region-btn::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid var(--frost); border-bottom: 1.5px solid var(--frost); transform: rotate(-45deg); transition: transform .25s var(--ease); }
+.zv__region-btn[aria-expanded="true"]::after { transform: rotate(45deg); }
+.zv__points { padding: 0 0 8px; }
+.zv__points[hidden] { display: none; }
+.zv__point {
+  width: 100%; display: grid; grid-template-columns: 10px 1fr auto; align-items: center; gap: 12px;
+  padding: 8px 4px 8px 8px; background: none; border: 0; border-radius: 6px; color: #C9D4DF; cursor: pointer;
+  font: 400 15px var(--f-text); text-align: left; transition: background-color .2s, color .2s;
+}
+.zv__point:hover { background: rgba(238, 242, 244, .06); color: var(--ice); }
+.zv__point.is-active { background: rgba(238, 242, 244, .1); color: var(--ice); }
+.zv__point i { width: 8px; height: 8px; border-radius: 50%; }
+.zv__point small { color: var(--frost); font-size: 13px; font-variant-numeric: tabular-nums; }
+.zv__region.is-filtered-out, .zv__point.is-filtered-out { display: none; }
+.zv__empty { padding: 24px 4px; color: var(--frost); }
+
+/* статусы */
+.is-done { background: var(--ice); }
+.is-part { background: var(--red); }
+.is-none { background: transparent; box-shadow: inset 0 0 0 1.5px var(--frost); }
+
+/* --- карта --- */
+.zv__mapwrap { position: sticky; top: calc(var(--hdr-h) + 16px); }
+.zv__stage { position: relative; aspect-ratio: 1 / 1; max-height: calc(100vh - var(--hdr-h) - 32px); border-radius: 8px; overflow: hidden; background: #0C1626; }
+.zv__map { width: 100%; height: 100%; display: block; }
+.zv__map .m-town { cursor: pointer; }
+.zv__map .m-town circle { transition: r .2s, fill .2s, stroke .2s; }
+.zv__map .m-town.st-done circle { fill: var(--ice); stroke: var(--ice); }
+.zv__map .m-town.st-part circle { fill: var(--red); stroke: var(--red); }
+.zv__map .m-town.st-none circle { fill: var(--night); stroke: var(--frost); }
+.zv__map .m-town:hover circle, .zv__map .m-town.is-active circle { r: 8; stroke: #fff; stroke-width: 2.5; }
+.zv__map .m-town.is-dim { opacity: .25 !important; }
+.zv__map .m-town.is-dim text { display: none; }
+.zv__map .m-town.is-active text { font-weight: 600; fill: #fff; }
+.zv__map .m-route { opacity: .55; }
+.zv__map .m-head, .zv__map .m-head-glow { display: none; }
+.zv__legend { position: absolute; left: 16px; bottom: 14px; display: flex; gap: 18px; font-size: 13px; color: var(--frost); }
+.zv__legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; vertical-align: -1px; }
+
+/* --- карточка пункта --- */
+.zv__card {
+  position: absolute; z-index: 3; width: 320px; max-width: calc(100% - 32px);
+  background: var(--ice); color: var(--ink);
+  border-radius: 10px; padding: 20px 20px 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+  transform-origin: var(--ox, 0) var(--oy, 0);
+}
+.zv__card::before { /* хвостик к точке */
+  content: ""; position: absolute; width: 12px; height: 12px; background: var(--ice);
+  left: var(--tx, -6px); top: var(--ty, 20px); transform: rotate(45deg);
+}
+.zv__close { position: absolute; right: 10px; top: 10px; width: 32px; height: 32px; border: 0; background: none; cursor: pointer; }
+.zv__close span { position: absolute; left: 8px; right: 8px; top: 15px; height: 1.5px; background: var(--ink); }
+.zv__close span:first-child { transform: rotate(45deg); }
+.zv__close span:last-child { transform: rotate(-45deg); }
+.zv__card-region { font-size: 13px; color: #5B6B7C; margin-bottom: 4px; }
+.zv__card-name { font: 400 22px/1.1 var(--f-display); letter-spacing: -.02em; margin-bottom: 14px; padding-right: 28px; }
+.zv__card-progress { height: 6px; background: rgba(19, 32, 47, .1); border-radius: 3px; overflow: hidden; }
+.zv__card-progress i { display: block; height: 100%; width: var(--p, 0%); background: var(--red); transition: width .6s var(--ease); }
+.zv__card-sum { margin: 8px 0 14px; font-size: 14px; color: #4A5868; }
+.zv__card-sum b { color: var(--ink); font-weight: 600; }
+.zv__table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.zv__table th { font-weight: 500; color: #5B6B7C; text-align: right; padding: 0 0 8px; border-bottom: 1px solid rgba(19, 32, 47, .12); }
+.zv__table th:first-child, .zv__table td:first-child { text-align: left; }
+.zv__table td { padding: 7px 0; text-align: right; font-variant-numeric: tabular-nums; border-bottom: 1px solid rgba(19, 32, 47, .07); }
+.zv__table td:last-child { font-weight: 600; }
+.zv__table tr:last-child td { border-bottom: 0; }
+.zv__card-empty { font-size: 14px; color: #4A5868; }
+
+/* --- сводка --- */
+.zv__summary { padding: clamp(64px, 10vh, 120px) var(--gutter) clamp(72px, 10vh, 120px); }
+.zv__summary .sec-title { margin-bottom: 12px; }
+.zv__note { color: var(--frost); font-size: 14px; margin-bottom: clamp(32px, 5vh, 48px); }
+.zv__groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 64px; }
+.zv__group h3 { font: 400 20px/1.2 var(--f-display); letter-spacing: -.02em; margin-bottom: 6px; }
+.zv__group-sum { color: var(--frost); font-size: 14px; margin-bottom: 16px; }
+.zv__group-sum b { color: var(--ice); font-weight: 500; }
+.zv__rows { display: grid; gap: 10px; }
+.zv__row { display: grid; grid-template-columns: 150px minmax(0, 1fr) 128px 44px; align-items: center; gap: 14px; font-size: 14px; }
+.zv__row .num, .zv__row .pct { white-space: nowrap; }
+.zv__row .bar { height: 8px; background: rgba(238, 242, 244, .1); border-radius: 2px; overflow: hidden; }
+.zv__row .bar i { display: block; height: 100%; width: var(--p); background: var(--red); }
+.zv__row .bar i.full { background: var(--ice); }
+.zv__row .num { text-align: right; color: #C9D4DF; font-variant-numeric: tabular-nums; }
+.zv__row .pct { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* --- адаптив --- */
+@media (max-width: 1000px) {
+  .zv__layout { grid-template-columns: 1fr; }
+  .zv__mapwrap { position: static; order: -1; }
+  .zv__stage { max-height: none; aspect-ratio: 4 / 5; }
+  .zv__side { position: static; max-height: none; }
+  .zv__list { max-height: 60vh; }
+  .zv__card { left: 16px !important; right: 16px; top: auto !important; bottom: 16px; width: auto; max-width: none; }
+  .zv__card::before { display: none; }
+  .zv__legend { top: 12px; bottom: auto; }
+  .zv__groups { grid-template-columns: 1fr; }
+  .zv__row { grid-template-columns: minmax(0, 1fr) auto 40px; gap: 6px 12px; font-size: 14px; }
+  .zv__row .bar { grid-column: 1 / -1; }
+}
+
+/* --- версия для слабовидящих --- */
+html.a11y .page-zavoz, html.a11y .zv__stage { background: #000; color: #fff; }
+html.a11y .zv__lead, html.a11y .zv__point, html.a11y .zv__region-pct, html.a11y .zv__note, html.a11y .zv__group-sum, html.a11y .zv__row .num, html.a11y .zv__legend { color: #fff; }
+html.a11y .zv__card { background: #fff; color: #000; }
+html.a11y .zv__card-region, html.a11y .zv__card-sum, html.a11y .zv__card-empty, html.a11y .zv__table th { color: #000; }
