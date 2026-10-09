@@ -105,3 +105,18 @@
 }
 html.a11y .scheme__pt { animation: none; }
 html.a11y .calc, html.a11y .calc__out, html.a11y .org__node { background: #000; color: #fff; border: 1px solid #fff; }
+
+/* услуги базы — карточки со значками */
+.svc { display: grid; gap: 14px; }
+.svc__item { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 22px; align-items: start; padding: 26px 28px; background: #fff; border-radius: 12px; border: 1px solid rgba(19, 32, 47, .08); transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
+.svc__item:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(19, 32, 47, .08); }
+.svc__ico { width: 64px; height: 64px; border-radius: 50%; background: var(--ice); display: grid; place-items: center; transition: background-color .4s; }
+.svc__item:hover .svc__ico { background: rgba(238, 58, 46, .1); }
+.svc__ico svg { width: 36px; height: 36px; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.svc__ico svg .ac { stroke: var(--red); }
+.svc h3 { font: 400 clamp(20px, 1.8vw, 24px)/1.15 var(--f-display); letter-spacing: -.02em; margin-bottom: 8px; }
+.svc p { color: #4A5868; font-size: 16px; }
+@media (max-width: 600px) { .svc__item { grid-template-columns: 1fr; gap: 14px; padding: 22px; } }
+html.a11y .svc__item { border: 1px solid #000; }
+html.a11y .svc p { color: inherit; }
+html.a11y .svc__ico svg, html.a11y .svc__ico svg .ac { stroke: #000; }

@@ -222,17 +222,17 @@
     });
 
     // подписи без наложений: узлы первыми, затем основные пункты, затем мелкие;
-    // каждая пробует свою сторону, потом остальные; мелкой без места — только всплывающая подсказка
+    // каждая пробует свою сторону, потом остальные; без места — подпись появляется при наведении или выборе пункта
     const pad = 3, hit = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
     const rank = t => t.hub ? 0 : t.minor ? 2 : 1;
     const placeLabels = () => {
       const taken = towns.map(t => { const r = t.hub ? 6 : 4; return { x: t.x - r, y: t.y - r, width: r * 2, height: r * 2 }; });
-      [ot, rt].forEach(n => taken.push(n.getBBox()));
+      [ot, rt].forEach(n => { const b = n.getBBox(); taken.push({ x: b.x - 10, y: b.y - 6, width: b.width + 20, height: b.height + 12 }); });
       const vb = svg.viewBox.baseVal, inView = r => !vb || !vb.width || (r.x >= vb.x && r.x + r.width <= vb.x + vb.width && r.y >= vb.y && r.y + r.height <= vb.y + vb.height);
       towns.filter(t => t.label).sort((a, b) => rank(a) - rank(b)).forEach(t => {
         const order = [t.side, 'r', 'l', 't', 'b', 'tr', 'br', 'tl', 'bl'].filter((s, i, a) => t.spots[s] && a.indexOf(s) === i);
         const put = s => { const [lx, ly, anchor] = t.spots[s]; t.label.setAttribute('x', lx); t.label.setAttribute('y', ly); t.label.setAttribute('text-anchor', anchor); };
-        t.label.style.display = '';
+        t.label.classList.remove('is-crowded');
         let box = null;
         for (const s of order) {
           put(s);
@@ -240,7 +240,7 @@
           if (!b.width || (inView(r) && !taken.some(q => hit(q, r)))) { box = r; break; }
         }
         if (box) taken.push(box);
-        else if (t.minor) t.label.style.display = 'none';
+        else if (!t.hub) { put(t.side); t.label.classList.add('is-crowded'); } // нет места — подпись при наведении или выборе
         else { put(t.side); taken.push(t.label.getBBox()); }
       });
     };

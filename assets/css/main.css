@@ -178,6 +178,8 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 .m-town.is-hub text { font: 500 15px var(--f-display); letter-spacing: -.01em; }
 .m-town.is-minor text { font-size: 11px; fill: #C9D4DF; }
 .m-town.is-minor circle { stroke-width: 1.3; }
+.m-town text.is-crowded { display: none; }
+.m-town:hover text.is-crowded, .m-town.is-active text.is-crowded { display: inline; }
 .m-wlabel { fill: #4D74A6; font: italic 400 13px var(--f-text); letter-spacing: .02em; }
 .m-origin { fill: #C9D4DF; font: 400 13px var(--f-text); }
 .m-origin text { paint-order: stroke; stroke: var(--night); stroke-width: 4px; stroke-linejoin: round; }
@@ -261,7 +263,7 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 
 .park {
   display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px 64px; align-items: end;
-  background: var(--deep);
+  background: linear-gradient(100deg, rgba(24, 48, 79, .96) 0%, rgba(24, 48, 79, .88) 45%, rgba(24, 48, 79, .55) 100%), url(../img/stock/frozen-river.jpg) center / cover, var(--deep);
   border-radius: 6px;
   padding: clamp(32px, 5vw, 64px);
 }

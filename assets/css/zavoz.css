@@ -3,7 +3,7 @@
 .page-zavoz .hdr.is-solid[data-theme="dark"] { background: rgba(15, 27, 45, .92); }
 .page-zavoz .hdr__nav a[aria-current] { opacity: 1; box-shadow: 0 1px 0 var(--red); }
 
-.zv { padding-top: calc(var(--hdr-h) + clamp(32px, 6vh, 64px)); }
+.zv { padding-top: calc(var(--hdr-h) + clamp(32px, 6vh, 64px)); background: linear-gradient(180deg, rgba(15, 27, 45, .3) 0, rgba(15, 27, 45, .62) 240px, var(--night) 520px), url(../img/stock/reindeer.jpg) center 55% / 100% auto no-repeat, var(--night); }
 .zv__head { margin-bottom: clamp(24px, 4vh, 40px); }
 .zv__title { font: 400 clamp(32px, 4.6vw, 64px)/1.02 var(--f-display); letter-spacing: -.03em; margin-bottom: 16px; }
 .zv__lead { color: #C9D4DF; max-width: 40em; font-size: 17px; }

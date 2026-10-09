@@ -83,4 +83,16 @@
     };
     if (matchMedia('(min-width: 901px)').matches) { draw(); addEventListener('resize', () => { ScrollTrigger.getAll().forEach(s => { if (s.trigger === org) s.kill(); }); draw(); }); }
   }
+
+  // ---------- Услуги базы: карточки выезжают по очереди, значки прорисовываются ----------
+  if (document.querySelector('.svc') && window.gsap && !calm()) {
+    gsap.utils.toArray('.svc__item').forEach(card => {
+      const lines = card.querySelectorAll('.svc__ico svg :is(path, circle, rect)');
+      lines.forEach(l => { const len = Math.ceil(l.getTotalLength()); gsap.set(l, { strokeDasharray: len, strokeDashoffset: len }); });
+      gsap.timeline({ scrollTrigger: { trigger: card, start: 'top 88%', once: true } })
+        .from(card, { x: 60, opacity: 0, duration: .9, ease: 'power3.out' })
+        .from(card.querySelector('.svc__ico'), { scale: .4, opacity: 0, duration: .6, ease: 'back.out(2)' }, .15)
+        .to(lines, { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut', stagger: .08 }, .3);
+    });
+  }
 })();

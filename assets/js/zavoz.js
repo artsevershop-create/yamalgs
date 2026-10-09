@@ -46,7 +46,7 @@
     document.getElementById('zvSeason').textContent = data.season.replace(/\D/g, '');
     document.getElementById('zvTotal').innerHTML = `Доставлено в посёлки <b>${fmt(totalFact)}</b> из ${fmt(totalPlan)} тонн — ${pct(totalFact, totalPlan)} %`;
     const upd = new Date(data.updated);
-    document.getElementById('zvUpdated').textContent = 'Обновлено ' + upd.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) + '. Тонны, по данным оперативного графика завоза.';
+    document.getElementById('zvUpdated').textContent = 'Обновлено ' + upd.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(/\.$/, '') + '. Тонны, по данным оперативного графика завоза.';
 
     // ---------- Список ----------
     const list = document.getElementById('zvList');

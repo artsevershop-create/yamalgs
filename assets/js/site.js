@@ -90,6 +90,39 @@
   if (!lightTheme && (document.body.classList.contains('page-home') || darkSecs.length)) { addEventListener('scroll', updTheme, { passive: true }); updTheme(); }
   if (lightTheme) hdr.dataset.theme = 'light';
 
+  // шапка страницы: ромбы логотипа прорисовываются и плывут, редкий снег, красная черта под заголовком.
+  // При «уменьшении движения» — только прорисовка без перемещений; в версии для слабовидящих — без эффектов.
+  const heroStill = calm(), heroDelay = root.classList.contains('intro-on') ? 1.1 : 0;
+  if (window.gsap && !root.classList.contains('a11y')) document.querySelectorAll('.page-hero').forEach(hero => {
+    const startDelay = heroDelay;
+    const fx = document.createElement('div'); fx.className = 'ph-fx'; fx.setAttribute('aria-hidden', 'true');
+    fx.innerHTML = '<canvas class="ph-snow"></canvas><svg class="ph-dia" viewBox="0 0 100 80"><rect class="mark__b" x="9" y="9" width="30" height="30" transform="rotate(45 24 24)"/><rect class="mark__r" x="61" y="9" width="30" height="30" transform="rotate(45 76 24)"/><rect class="mark__w" x="35" y="35" width="30" height="30" transform="rotate(45 50 50)"/></svg>';
+    hero.insertBefore(fx, hero.firstChild);
+    const title = hero.querySelector('.page-hero__title');
+    if (title) { const rule = document.createElement('span'); rule.className = 'ph-rule'; rule.setAttribute('aria-hidden', 'true'); title.after(rule);
+      gsap.from(rule, { scaleX: 0, transformOrigin: 'left', duration: 1.2, ease: 'power3.inOut', delay: startDelay + 0.6 }); }
+    const rects = fx.querySelectorAll('.ph-dia rect');
+    rects.forEach(r => { const len = r.getTotalLength(); gsap.set(r, { strokeDasharray: len, strokeDashoffset: len }); });
+    gsap.to(rects, { strokeDashoffset: 0, duration: 1.8, stagger: 0.25, ease: 'power2.inOut', delay: startDelay + 0.3 });
+    gsap.to(rects, { fillOpacity: .16, duration: 1.2, stagger: 0.25, delay: startDelay + 1.6 });
+    if (heroStill) return;
+    rects.forEach((r, i) => gsap.to(r, { y: i % 2 ? 3 : -3, duration: 3.4 + i * 0.7, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.4 }));
+    const dia = fx.querySelector('.ph-dia');
+    const dx = gsap.quickTo(dia, 'x', { duration: 1.6, ease: 'power3' }), dy = gsap.quickTo(dia, 'y', { duration: 1.6, ease: 'power3' });
+    hero.addEventListener('mousemove', e => { const b = hero.getBoundingClientRect(); dx((e.clientX - b.left - b.width / 2) / b.width * -24); dy((e.clientY - b.top - b.height / 2) / b.height * -16); });
+    // снег: немного медленных хлопьев, только пока шапка на экране
+    const cv = fx.querySelector('.ph-snow'), ctx = cv.getContext('2d');
+    let W = 0, H = 0, flakes = [], on = false, raf = 0;
+    const size = () => { const d = Math.min(devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight; if (!W || !H) return; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+      flakes = Array.from({ length: Math.round(W * H / 16000) }, () => ({ x: Math.random() * W, y: Math.random() * H, r: .6 + Math.random() * 1.4, v: 6 + Math.random() * 12, s: Math.random() * 6.28, a: .2 + Math.random() * .4 })); };
+    let last = 0;
+    const tick = now => { const dt = Math.min(.05, (now - (last || now)) / 1000); last = now; ctx.clearRect(0, 0, W, H);
+      for (const f of flakes) { f.y += f.v * dt; f.s += dt * .6; const x = f.x + Math.sin(f.s) * 8; if (f.y > H + 4) { f.y = -4; f.x = Math.random() * W; }
+        ctx.globalAlpha = f.a; ctx.fillStyle = '#EEF2F4'; ctx.beginPath(); ctx.arc(x, f.y, f.r, 0, 6.283); ctx.fill(); }
+      if (on) raf = requestAnimationFrame(tick); };
+    if (window.ResizeObserver) new ResizeObserver(size).observe(cv); size();
+    new IntersectionObserver(([en]) => { on = en.isIntersecting; cancelAnimationFrame(raf); if (on) { last = 0; raf = requestAnimationFrame(tick); } }).observe(hero);
+  });
   if (calm() || !window.gsap) return;
   gsap.registerPlugin(ScrollTrigger, SplitText);
 
