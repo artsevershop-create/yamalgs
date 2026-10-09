@@ -329,3 +329,72 @@ html.a11y .dirs p { color: inherit; }
 .sticky__img img { width: 100%; height: 100%; object-fit: cover; }
 @media (max-width: 900px) { .sticky__img { display: none; } }
 @keyframes ph-grid { to { background-position: 120px 120px, 120px 120px; } }
+
+/* ===== Инфографика: цифра + значок + подпись ===== */
+.ig { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.prose .ig { padding: 0; margin: 28px 0; }
+.prose .ig li + li { margin-top: 0; }
+.ig__item { position: relative; display: grid; gap: 10px; align-content: start; padding: 22px 22px 24px; border-radius: 12px; background: #fff; border: 1px solid rgba(19, 32, 47, .08); overflow: hidden; }
+.ig__item::after { content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 3px; background: var(--red); transform-origin: left; transform: scaleX(var(--ig-bar, 1)); }
+.ig__ico svg, .kpi__ico svg, .cmp svg { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.ig__ico svg { width: 40px; height: 40px; }
+.ig__ico .ac, .kpi__ico .ac { stroke: var(--red); }
+.ig__num { margin: 0; font: 400 clamp(28px, 2.6vw, 40px)/1.05 var(--f-display); letter-spacing: -.03em; }
+.ig__num small { font: 500 15px/1 var(--f-text); letter-spacing: 0; margin-left: 6px; color: #5B6B7C; }
+.ig__num em { font: 400 15px/1 var(--f-text); font-style: normal; letter-spacing: 0; margin-right: 6px; color: #5B6B7C; vertical-align: .35em; }
+.ig__num--text { font-size: clamp(20px, 1.7vw, 24px); letter-spacing: -.02em; }
+.ig__cap { margin: 0; font-size: 15px; line-height: 1.45; color: #4A5868; }
+:is(.sec--dark, .sec--deep, .base, .voyage, .timeline, .page-hero) .ig__item { background: rgba(238, 242, 244, .05); border-color: rgba(143, 163, 184, .22); color: var(--ice); }
+:is(.sec--dark, .sec--deep, .base, .voyage, .timeline, .page-hero) :is(.ig__num small, .ig__num em, .ig__cap) { color: #C9D4DF; }
+.ig--compact { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 16px; }
+.ig--compact .ig__item { padding: 16px 16px 18px; gap: 6px; }
+.ig--compact .ig__ico svg { width: 30px; height: 30px; }
+.ig--compact .ig__num { font-size: clamp(22px, 2vw, 28px); }
+.ig--compact .ig__cap { font-size: 14px; }
+.kpi__ico { display: block; margin-bottom: 12px; }
+.kpi__ico svg { width: 36px; height: 36px; }
+html.a11y .ig__item { background: transparent; border: 1px solid currentColor; }
+html.a11y :is(.ig__cap, .ig__num small, .ig__num em) { color: inherit; }
+html.a11y :is(.ig__ico, .kpi__ico) .ac { stroke: currentColor; }
+
+/* ===== Сравнение условий: три уровня поддержки ===== */
+.cmp { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.cmp__col { --c: var(--frost); position: relative; display: flex; flex-direction: column; gap: 12px; padding: 26px 24px 28px; border-radius: 14px; background: rgba(238, 242, 244, .04); border: 1px solid rgba(143, 163, 184, .22); }
+.cmp__col--pp { --c: #7D9BFF; background: rgba(74, 114, 240, .09); border-color: rgba(74, 114, 240, .45); }
+.cmp__col--az { --c: #FF6B61; background: rgba(238, 58, 46, .09); border-color: rgba(238, 58, 46, .5); }
+.cmp__col::before { content: ""; position: absolute; left: 24px; right: 24px; top: 0; height: 3px; border-radius: 0 0 3px 3px; background: var(--c); }
+.cmp__head { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.cmp__big svg { width: 52px; height: 52px; color: var(--ice); }
+.cmp__big .ac { stroke: var(--c); }
+.cmp__lvl { display: flex; gap: 4px; }
+.cmp__lvl i { width: 22px; height: 6px; border-radius: 3px; background: rgba(143, 163, 184, .28); }
+.cmp__lvl i.on { background: var(--c); }
+.cmp h3 { font: 400 clamp(19px, 1.6vw, 22px)/1.2 var(--f-display); letter-spacing: -.02em; }
+.cmp__note { margin: 0; font-size: 14px; color: #C9D4DF; }
+.cmp__count { margin: 0; font-size: 14px; color: #C9D4DF; }
+.cmp__count b { font: 400 34px/1 var(--f-display); color: var(--c); margin-right: 6px; letter-spacing: -.03em; }
+.cmp__list { list-style: none; margin: 4px 0 0; padding: 14px 0 0; border-top: 1px solid rgba(143, 163, 184, .2); display: grid; gap: 10px; }
+.cmp__list li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 15px; line-height: 1.4; color: var(--ice); }
+.cmp__list svg { width: 22px; height: 22px; margin-top: 1px; color: rgba(238, 242, 244, .5); }
+.cmp__list .ac { stroke: var(--c); stroke-width: 2.2; }
+.cmp__col--base .cmp__list li { color: #C9D4DF; }
+@media (max-width: 900px) { .cmp { grid-template-columns: 1fr; } }
+html.a11y .cmp__col { background: #000; border: 1px solid #fff; }
+html.a11y .cmp :is(.cmp__note, .cmp__count, .cmp__list li) { color: #fff; }
+/* в узкой колонке текста — три карточки в ряд; факторы — полосами: заголовок слева, текст справа */
+.prose .ig:not(.ig--factors) { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.prose .ig .ig__item { padding: 18px 18px 20px; }
+.prose .ig .ig__num { font-size: clamp(24px, 2.2vw, 32px); }
+.ig--factors { grid-template-columns: 1fr; }
+.ig--factors .ig__item { grid-template-columns: 44px minmax(0, 13em) minmax(0, 1fr); align-items: start; gap: 8px 18px; }
+.ig--factors .ig__cap { padding-top: 4px; }
+@media (max-width: 700px) { .ig--factors .ig__item { grid-template-columns: 1fr; } }
+.ig--factors .ig__item { grid-template-columns: 44px minmax(0, 11.5em) minmax(0, 1fr); }
+.ig--factors .ig__num--text { font-size: clamp(17px, 1.35vw, 19px); line-height: 1.25; padding-top: 6px; }
+.ig--factors .ig__num:not(.ig__num--text) { font-size: clamp(24px, 2vw, 30px); padding-top: 4px; }
+.prose .ig .ig__num { font-size: clamp(22px, 1.8vw, 28px); }
+.prose .ig .ig__num--text { font-size: clamp(16px, 1.3vw, 19px); line-height: 1.25; }
+.prose .ig .ig__num em, .prose .ig .ig__num small { font-size: 13px; }
+/* блоки из шести цифр — ровно 3 × 2, без одинокой карточки */
+.kpi:has(> div:nth-child(6):last-child) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 700px) { .kpi:has(> div:nth-child(6):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

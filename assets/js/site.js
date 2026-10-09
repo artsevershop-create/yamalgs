@@ -215,6 +215,20 @@
     gsap.from(img, { scale: 1.18, duration: 1.4, ease: 'power3.out', scrollTrigger: { trigger: img, start: 'top 92%', once: true } });
   });
 
+  // ---------- Инфографика: значки прорисовываются линиями, под карточками растёт красная полоса ----------
+  document.querySelectorAll('.ig, .cmp, .kpi').forEach(box => {
+    const lines = [...box.querySelectorAll(':is(.ig__ico, .kpi__ico, .cmp__big, .cmp__list) svg :is(path, circle, rect)')];
+    if (!lines.length) return;
+    lines.forEach(l => { const len = Math.ceil(l.getTotalLength()); gsap.set(l, { strokeDasharray: len, strokeDashoffset: len }); });
+    const bars = box.querySelectorAll('.ig__item');
+    gsap.set(bars, { '--ig-bar': 0 });
+    ScrollTrigger.create({ trigger: box, start: 'top 85%', once: true, onEnter: () => {
+      gsap.to(lines, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut', stagger: { each: 0.025 }, delay: 0.2 });
+      gsap.to(bars, { '--ig-bar': 1, duration: 1.2, ease: 'power3.inOut', stagger: 0.12, delay: 0.3 });
+      gsap.from(box.querySelectorAll('.cmp__lvl i.on'), { scaleX: 0, transformOrigin: 'left', duration: 0.5, stagger: 0.12, delay: 0.5 });
+    } });
+  });
+
   // ---------- Магнитные кнопки ----------
   if (matchMedia('(hover: hover)').matches) {
     document.querySelectorAll('.btn').forEach(b => {
@@ -232,6 +246,8 @@
   document.querySelectorAll('[data-count]').forEach(el => {
     const end = parseFloat(el.dataset.count), dec = (el.dataset.count.split('.')[1] || '').length;
     const obj = { v: 0 };
+    // в разметке — настоящее число (его видно без анимации); перед счётом обнуляем
+    el.textContent = '0';
     gsap.to(obj, { v: end, duration: 1.6, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true }, onUpdate: () => { el.textContent = obj.v.toLocaleString('ru-RU', { minimumFractionDigits: dec, maximumFractionDigits: dec }); } });
   });
 
