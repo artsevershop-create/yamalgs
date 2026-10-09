@@ -25,10 +25,9 @@
 
   function calmDown() {
     if (window.gsap) {
-      gsap.set('.panel__inner, .base__clip, .base__clip img, .base__caption, .ftr__word .mark rect, .about__text .word, .cargo__bar i', { clearProps: 'all' });
+      gsap.set('.panel__inner, .base__clip, .base__clip img, .base__caption, .ftr__word .mark rect, .about__text .word, .cargo__bar i, .work__img', { clearProps: 'all' });
       gsap.set([map.grid, map.circle, map.circleT, map.origin, ...map.water.querySelectorAll('.m-sea')], { clearProps: 'opacity' });
       gsap.set(map.rivers, { clearProps: 'strokeDasharray,strokeDashoffset' });
-      gsap.set('.peek', { opacity: 0 });
     }
     map.setProgress(1); meta.classList.add('is-on');
   }
@@ -85,22 +84,10 @@
     onSplit: self => gsap.to(self.words, { opacity: 1, stagger: 0.08, ease: 'none', scrollTrigger: { trigger: '.about__text', start: 'top 80%', end: 'bottom 45%', scrub: true } })
   });
 
-  // ---------- Деятельность: превью фото за курсором ----------
-  const peek = document.querySelector('.peek');
-  const peekImg = peek.querySelector('img');
-  if (matchMedia('(hover: hover) and (min-width: 861px)').matches) {
-    const xTo = gsap.quickTo(peek, 'x', { duration: 0.6, ease: 'power3' });
-    const yTo = gsap.quickTo(peek, 'y', { duration: 0.6, ease: 'power3' });
-    const list = document.querySelector('.work__list');
-    list.addEventListener('mousemove', e => { xTo(e.clientX + 24); yTo(e.clientY - 110); });
-    document.querySelectorAll('.work__row').forEach(row => {
-      row.addEventListener('mouseenter', () => {
-        peekImg.src = row.dataset.img;
-        gsap.fromTo(peek, { rotation: -4 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.5, ease: 'power3.out' });
-      });
-    });
-    list.addEventListener('mouseleave', () => gsap.to(peek, { opacity: 0, scale: 0.6, duration: 0.4, ease: 'power3.in' }));
-  }
+  // ---------- Деятельность: фото строк проявляются при прокрутке ----------
+  gsap.utils.toArray('.work__img').forEach(w => {
+    gsap.fromTo(w, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: w, start: 'top 88%', once: true } });
+  });
 
   // ---------- Обской причал: фото раскрывается на прокрутке ----------
   gsap.timeline({ scrollTrigger: { trigger: '.base__media', start: 'top 80%', end: 'bottom bottom', scrub: true } })

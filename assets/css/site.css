@@ -215,6 +215,8 @@ html.intro-on main, html.intro-on .ftr { opacity: 0; }
 .album__grid a { display: block; aspect-ratio: 4 / 3; border-radius: 6px; overflow: hidden; }
 .album__grid img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
 .album__grid a:hover img { transform: scale(1.06); }
+.album__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 700px) { .album__grid--3 { grid-template-columns: 1fr 1fr; } }
 .video video { width: 100%; border-radius: 8px; background: #000; }
 .video figcaption { margin-top: 12px; font-size: 14px; color: #5B6B7C; }
 .lightbox { position: fixed; inset: 0; z-index: 90; background: rgba(15, 27, 45, .94); display: grid; place-items: center; }
@@ -296,3 +298,21 @@ html.a11y .timeline__line { transform: none !important; }
 .rows--compact .rows__item > div { padding: 14px 0; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); }
 .rows--compact .rows__item h3 { font: 500 17px/1.3 var(--f-text); letter-spacing: 0; }
 .rows--compact .rows__item p { font-size: 15px; }
+
+/* направления деятельности — карточки с фото */
+.prose--lead { max-width: 52em; margin-bottom: clamp(40px, 6vh, 64px); }
+.dirs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 32px 24px; }
+.dirs li { grid-column: span 2; }
+.dirs li:nth-child(-n+2) { grid-column: span 3; }
+.dirs a { display: grid; gap: 14px; text-decoration: none; color: inherit; }
+.dirs__img { display: block; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; background: var(--deep); }
+.dirs__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+.dirs a:hover .dirs__img img { transform: scale(1.04); }
+.dirs h3 { font: 400 clamp(20px, 1.8vw, 26px)/1.15 var(--f-display); letter-spacing: -.02em; transition: color .3s; }
+.dirs a:hover h3 { color: var(--red-text); }
+.dirs p { color: #4A5868; font-size: 16px; }
+@media (max-width: 900px) { .dirs { grid-template-columns: 1fr; } .dirs li, .dirs li:nth-child(-n+2) { grid-column: auto; } }
+html.a11y .dirs p { color: inherit; }
+.sticky__img { margin: 28px 0 0; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden; background: var(--deep); max-width: 520px; }
+.sticky__img img { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 900px) { .sticky__img { display: none; } }
