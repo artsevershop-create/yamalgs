@@ -163,6 +163,30 @@
       sum.appendChild(el);
     });
 
+    // ---------- Погрузка судов: последние погрузки и ближайшие по графику ----------
+    const L = data.loadings || [];
+    if (L.length) {
+      const today = data.updated;
+      const done = L.filter(l => l.fact > 0), next = L.filter(l => !(l.fact > 0) && l.date >= today);
+      const tons = done.reduce((a, l) => a + l.fact, 0);
+      const d = s => new Date(s).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+      const ico = '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 30h40l-5 8H9z"/><path d="M10 30v-7h18v7"/><path d="M32 30v-10h6v10"/><path class="ac" d="M4 44c3 0 3-2 6-2s3 2 6-2 3 2 6 2 3-2 6-2 3 2 6 2 3-2 6-2"/></svg>';
+      document.getElementById('shipsKpi').innerHTML = [
+        [done.length, 'погрузок судов в навигацию'], [fmt(tons) + ' т', 'погружено нефтепродуктов'], [next.length, 'погрузок осталось по графику']
+      ].map(([n, t]) => `<div><b>${n}</b><span>${t}</span></div>`).join('');
+      const rows = done.slice(-5).concat(next.slice(0, 3));
+      document.getElementById('shipsList').innerHTML = rows.map(l => {
+        const ok = l.fact > 0;
+        return `<li class="${ok ? 'zv__ship--done' : 'zv__ship--plan'}"><span class="zv__ship-ico">${ico}</span>
+          <time datetime="${l.date}">${d(l.date)}</time>
+          <span class="zv__ship-name">${l.ships.replace(/^т\/х /, 'т/х ')}</span>
+          <span class="zv__ship-cargo">${l.cargo} · ${l.from}</span>
+          <span class="zv__ship-t">${fmt(ok ? l.fact : l.plan)} т</span>
+          <span class="zv__ship-st">${ok ? 'погружено' : 'по графику'}</span></li>`;
+      }).join('');
+      document.getElementById('ships').hidden = false;
+    }
+
     // ---------- Появление ----------
     if (window.gsap && !calm()) {
       gsap.from(map.water.querySelectorAll('.m-sea'), { opacity: 0, duration: 1.2, stagger: .08 });

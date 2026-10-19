@@ -136,3 +136,32 @@ html.a11y .page-zavoz, html.a11y .zv__stage { background: #000; color: #fff; }
 html.a11y .zv__lead, html.a11y .zv__point, html.a11y .zv__region-pct, html.a11y .zv__note, html.a11y .zv__group-sum, html.a11y .zv__row .num, html.a11y .zv__legend { color: #fff; }
 html.a11y .zv__card { background: #fff; color: #000; }
 html.a11y .zv__card-region, html.a11y .zv__card-sum, html.a11y .zv__card-empty, html.a11y .zv__table th { color: #000; }
+
+/* --- погрузка судов --- */
+.zv__ships { padding: 0 var(--gutter) clamp(72px, 10vh, 120px); }
+.zv__ships .sec-title { margin-bottom: 12px; }
+.zv__ships-kpi { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 28px; }
+.zv__ships-kpi div { display: grid; gap: 6px; padding: 20px 22px; border-radius: 12px; background: rgba(238, 242, 244, .05); border: 1px solid rgba(143, 163, 184, .22); }
+.zv__ships-kpi b { font: 400 clamp(26px, 2.4vw, 36px)/1 var(--f-display); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.zv__ships-kpi span { font-size: 14px; color: #C9D4DF; }
+.zv__ships-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(143, 163, 184, .2); }
+.zv__ships-list li { display: grid; grid-template-columns: 40px 130px minmax(0, 1.3fr) minmax(0, 1.3fr) 110px 110px; gap: 16px; align-items: center; padding: 14px 4px; border-bottom: 1px solid rgba(143, 163, 184, .2); font-size: 15px; }
+.zv__ship-ico svg { width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.zv__ship-ico .ac { stroke: var(--red); }
+.zv__ships-list time { color: var(--frost); font-variant-numeric: tabular-nums; }
+.zv__ship-name { font-weight: 500; }
+.zv__ship-cargo { color: #C9D4DF; }
+.zv__ship-t { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+.zv__ship-st { justify-self: end; font-size: 13px; padding: 4px 10px; border-radius: 999px; background: rgba(238, 242, 244, .1); }
+.zv__ships-list .zv__ship--plan { color: #C9D4DF; }
+.zv__ships-list .zv__ship--plan .zv__ship-st { background: transparent; border: 1px dashed rgba(238, 58, 46, .7); color: #FF8A80; }
+@media (max-width: 900px) {
+  .zv__ships-kpi { grid-template-columns: 1fr; }
+  .zv__ships-list li { grid-template-columns: 32px minmax(0, 1fr) auto; gap: 4px 12px; }
+  .zv__ship-ico { grid-row: 1 / 4; }
+  .zv__ships-list time, .zv__ship-cargo { grid-column: 2; font-size: 13px; }
+  .zv__ship-name { grid-column: 2; grid-row: 1; }
+  .zv__ship-t { grid-column: 3; grid-row: 1; }
+  .zv__ship-st { grid-column: 3; grid-row: 2; }
+}
+html.a11y .zv__ships-kpi span, html.a11y .zv__ship-cargo, html.a11y .zv__ships-list time { color: #fff; }

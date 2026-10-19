@@ -29,6 +29,19 @@
     setTimeout(() => { copy.textContent = 'Скопировать реквизиты'; }, 2000);
   });
 
+  // ---------- Мастер-план промпарка: точка на плане ↔ карточка зоны ----------
+  const mplan = document.getElementById('mplan');
+  if (mplan) {
+    const items = [...document.querySelectorAll('.mplan__list li')], pts = [...mplan.querySelectorAll('.mplan__pt')];
+    const on = i => { items.forEach(x => x.classList.toggle('is-on', x.dataset.i === i)); pts.forEach(x => x.classList.toggle('is-on', x.dataset.i === i)); };
+    pts.forEach(p => {
+      p.addEventListener('mouseenter', () => on(p.dataset.i));
+      p.addEventListener('click', () => { on(p.dataset.i); const li = items[+p.dataset.i]; if (matchMedia('(max-width: 900px)').matches) li.scrollIntoView({ block: 'center', behavior: calm() ? 'auto' : 'smooth' }); });
+    });
+    items.forEach(li => li.addEventListener('mouseenter', () => on(li.dataset.i)));
+    mplan.parentElement.addEventListener('mouseleave', () => on(null));
+  }
+
   // ---------- Схема базы: подсказки ----------
   const scheme = document.getElementById('scheme');
   if (scheme) {

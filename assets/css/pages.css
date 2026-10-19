@@ -131,3 +131,38 @@ html.a11y .svc__ico svg, html.a11y .svc__ico svg .ac { stroke: #000; }
   .scheme__legend b { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--red-text); color: #fff; font: 500 12px var(--f-display); }
 }
 html.a11y .scheme__legend li { color: inherit; }
+
+/* мастер-план промпарка */
+.mplan { position: relative; max-width: 1100px; margin: 0 auto; }
+.mplan img { width: 100%; height: auto; display: block; filter: drop-shadow(0 30px 40px rgba(19, 32, 47, .18)); }
+.mplan__pt { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%); width: 40px; height: 40px; border: 0; padding: 0; border-radius: 50%; cursor: pointer; background: transparent; }
+.mplan__pt span { position: relative; z-index: 1; display: grid; place-items: center; width: 100%; height: 100%; border-radius: 50%; background: var(--red-text); color: #fff; font: 500 14px var(--f-display); box-shadow: 0 0 0 3px #fff, 0 8px 20px rgba(19, 32, 47, .3); transition: transform .3s var(--ease), background-color .3s; }
+.mplan__pt::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: rgba(238, 58, 46, .35); animation: mplanPulse 2.6s ease-out infinite; }
+.mplan__pt:hover span, .mplan__pt.is-on span { transform: scale(1.18); background: var(--night); }
+@keyframes mplanPulse { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(2.2); opacity: 0; } }
+.mplan__list { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.mplan__list li { display: grid; grid-template-columns: 28px 36px minmax(0, 1fr); gap: 12px; align-items: start; padding: 18px; border-radius: 12px; background: #fff; border: 1px solid rgba(19, 32, 47, .08); transition: border-color .3s, box-shadow .3s, transform .3s var(--ease); cursor: default; }
+.mplan__list li.is-on { border-color: var(--red); box-shadow: 0 14px 30px rgba(19, 32, 47, .1); transform: translateY(-2px); }
+.mplan__n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--red-text); color: #fff; font: 500 12px var(--f-display); }
+.mplan__ico svg { width: 36px; height: 36px; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.mplan__ico .ac { stroke: var(--red); }
+.mplan__list h3 { font: 400 18px/1.2 var(--f-display); letter-spacing: -.02em; margin-bottom: 6px; }
+.mplan__list p { margin: 0; font-size: 14px; line-height: 1.45; color: #4A5868; }
+.mplan__cta { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; }
+@media (max-width: 900px) { .mplan__list { grid-template-columns: 1fr; } .mplan__pt { width: 28px; height: 28px; } .mplan__pt span { font-size: 12px; } }
+@media (prefers-reduced-motion: reduce) { .mplan__pt::before { animation: none; } }
+html.a11y .mplan__pt::before { display: none; }
+html.a11y .mplan__list li { border: 1px solid #000; }
+html.a11y .mplan__list p { color: inherit; }
+
+/* вопросы и ответы */
+.faq { display: grid; gap: 10px; }
+.faq__item { background: #fff; border: 1px solid rgba(19, 32, 47, .08); border-radius: 12px; transition: box-shadow .3s; }
+.faq__item[open] { box-shadow: 0 14px 30px rgba(19, 32, 47, .08); }
+.faq__item summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) 28px; gap: 16px; align-items: center; padding: 20px 22px; font: 400 clamp(17px, 1.4vw, 20px)/1.25 var(--f-display); letter-spacing: -.02em; }
+.faq__item summary::-webkit-details-marker { display: none; }
+.faq__item summary::after { content: "+"; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--ice); color: var(--red-text); font: 400 20px/1 var(--f-text); transition: transform .3s var(--ease); }
+.faq__item[open] summary::after { transform: rotate(45deg); }
+.faq__item p { margin: 0; padding: 0 22px 22px; font-size: 16px; line-height: 1.55; color: #4A5868; max-width: 46em; }
+html.a11y .faq__item { border: 1px solid #000; }
+html.a11y .faq__item p { color: inherit; }
