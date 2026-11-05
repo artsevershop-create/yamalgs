@@ -166,3 +166,22 @@ html.a11y .mplan__list p { color: inherit; }
 .faq__item p { margin: 0; padding: 0 22px 22px; font-size: 16px; line-height: 1.55; color: #4A5868; max-width: 46em; }
 html.a11y .faq__item { border: 1px solid #000; }
 html.a11y .faq__item p { color: inherit; }
+
+/* карта парка, участки, инфраструктура */
+.parkmap { margin: 0; }
+.parkmap > a { display: block; background: #fff; border-radius: 12px; padding: clamp(8px, 1.5vw, 20px); box-shadow: 0 20px 50px rgba(19, 32, 47, .12); cursor: zoom-in; }
+.parkmap img { width: 100%; height: auto; display: block; }
+.parkmap figcaption { margin-top: 14px; font-size: 14px; color: #4A5868; display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.parkmap__lists { margin-top: clamp(28px, 5vh, 56px); }
+.parkmap__lists h3, .infra__t { font: 400 clamp(20px, 1.8vw, 24px)/1.2 var(--f-display); letter-spacing: -.02em; margin-bottom: 14px; }
+.maplist { list-style: none; margin: 0; padding: 0; columns: 2 240px; column-gap: 32px; }
+.maplist li { break-inside: avoid; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 8px; padding: 9px 0; border-bottom: 1px solid rgba(19, 32, 47, .12); font-size: 15px; }
+.maplist li span { font: 500 12px/24px var(--f-display); color: var(--red-text); }
+.tablewrap { overflow-x: auto; }
+.ptable { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; font-variant-numeric: tabular-nums; }
+.ptable th, .ptable td { text-align: left; padding: 14px 20px; border-bottom: 1px solid rgba(19, 32, 47, .1); }
+.ptable th { font: 500 13px var(--f-text); color: #5B6B7C; text-transform: uppercase; letter-spacing: .06em; }
+.ptable th:last-child, .ptable td:last-child { text-align: right; }
+.ptable tfoot td { font-weight: 600; background: var(--ice); border-bottom: 0; }
+.sec--dark .infra__t { color: var(--ice); }
+html.a11y .ptable, html.a11y .parkmap > a { border: 1px solid #000; }
