@@ -185,3 +185,11 @@ html.a11y .faq__item p { color: inherit; }
 .ptable tfoot td { font-weight: 600; background: var(--ice); border-bottom: 0; }
 .sec--dark .infra__t { color: var(--ice); }
 html.a11y .ptable, html.a11y .parkmap > a { border: 1px solid #000; }
+
+/* схема базы на карте парка */
+.scheme--map { background: #fff; box-shadow: 0 20px 50px rgba(0,0,0,.25); }
+.scheme__pt--zone { background: #2F55D4; width: 34px; height: 34px; font-size: 14px; }
+.scheme__pt--zone:hover, .scheme__pt--zone.is-active { background: var(--night); }
+.scheme--map .scheme__pt { width: 24px; height: 24px; font-size: 11px; }
+.scheme--map .scheme__pt--zone { width: 30px; height: 30px; font-size: 13px; }
+.mplan__list .link { display: inline-block; margin-top: 8px; font-size: 14px; }

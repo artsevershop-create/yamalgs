@@ -52,21 +52,51 @@
   }
 
   // ---------- Формы: согласие и отправка ----------
+  // Если в config.js задан leadUrl, заявка уходит в CRM; иначе (или при ошибке) открывается письмо на ygs@yamalgs.ru.
+  const CFG = window.YGS || {};
+  const labelOf = (form, k) => form.querySelector('[name="' + k + '"]')?.closest('label')?.querySelector('span')?.textContent?.trim() || k;
   document.querySelectorAll('form[data-form]').forEach(form => {
-    form.addEventListener('submit', e => {
+    // скрытое поле-ловушка для ботов: человек его не видит и не заполняет
+    const trap = document.createElement('input'); trap.type = 'text'; trap.name = 'website'; trap.tabIndex = -1; trap.autocomplete = 'off'; trap.setAttribute('aria-hidden', 'true');
+    trap.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;opacity:0'; form.appendChild(trap);
+    const status = document.createElement('p'); status.className = 'form__status'; status.setAttribute('role', 'status'); status.hidden = true; form.appendChild(status);
+    const say = (text, bad) => { status.textContent = text; status.hidden = !text; status.classList.toggle('is-error', !!bad); };
+    const mailto = (data) => {
+      const subject = encodeURIComponent(form.dataset.form);
+      const body = encodeURIComponent(Object.entries(data).filter(([k, v]) => v && !['consent', 'website'].includes(k)).map(([k, v]) => labelOf(form, k) + ': ' + v).join('\n'));
+      location.href = 'mailto:ygs@yamalgs.ru?subject=' + subject + '&body=' + body;
+    };
+    form.addEventListener('submit', async e => {
       e.preventDefault();
       const consent = form.querySelector('input[name="consent"]');
       if (consent && !consent.checked) { consent.focus(); form.querySelector('.form__consent').classList.add('is-error'); return; }
-      const btn = form.querySelector('button[type="submit"]');
-      // Прототип: письмо формируется на стороне клиента. На проде — обработчик Битрикса или почтовый шлюз.
+      const btn = form.querySelector('button[type="submit"]'), label = btn.textContent;
       const data = Object.fromEntries(new FormData(form).entries());
-      const subject = encodeURIComponent(form.dataset.form);
-      const body = encodeURIComponent(Object.entries(data).filter(([k]) => k !== 'consent').map(([k, v]) => `${form.querySelector(`[name="${k}"]`)?.closest('label')?.querySelector('span')?.textContent || k}: ${v}`).join('\n'));
-      location.href = `mailto:ygs@yamalgs.ru?subject=${subject}&body=${body}`;
-      btn.textContent = 'Открываем почту…';
-      setTimeout(() => { btn.textContent = 'Отправлено'; form.reset(); }, 1500);
+      say('');
+      if (!CFG.leadUrl) { mailto(data); btn.textContent = 'Открываем почту…'; setTimeout(() => { btn.textContent = 'Отправлено'; form.reset(); }, 1500); return; }
+      btn.disabled = true; btn.textContent = 'Отправляем…';
+      const rest = Object.entries(data).filter(([k, v]) => v && !['consent', 'website', 'name', 'phone', 'email', 'company'].includes(k)).map(([k, v]) => labelOf(form, k) + ': ' + v);
+      const payload = { name: data.name || data.company || 'Посетитель сайта', phone: data.phone || '', email: data.email || '', company: data.company || '', website: data.website || '',
+        message: ['Форма: ' + form.dataset.form].concat(rest).join('\n') };
+      try {
+        const r = await fetch(CFG.leadUrl, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Lead-Key': CFG.leadKey || '' }, body: JSON.stringify(payload) });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        form.reset(); say('Заявка отправлена. Мы свяжемся с вами в ближайшее время.');
+      } catch (err) {
+        say('Не удалось отправить заявку. Позвоните нам или напишите на ygs@yamalgs.ru — открываем письмо.', true); mailto(data);
+      } finally { btn.disabled = false; btn.textContent = label; }
     });
   });
+
+  // ---------- Яндекс Метрика: только с номером счётчика и после согласия на cookie ----------
+  const loadMetrika = () => {
+    const id = Number(CFG.metrika); if (!id || window.__ygsMetrika) return; window.__ygsMetrika = true;
+    window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments); }; window.ym.l = +new Date();
+    const sc = document.createElement('script'); sc.async = true; sc.src = 'https://mc.yandex.ru/metrika/tag.js'; document.head.appendChild(sc);
+    window.ym(id, 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true });
+  };
+  if (store.get('ygs-cookie') === 'accept') loadMetrika();
+  document.addEventListener('click', e => { if (e.target.closest('[data-cookie="accept"]')) setTimeout(loadMetrika, 0); });
 
   // ---------- Шапка ----------
   const hdr = document.querySelector('.hdr');

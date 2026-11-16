@@ -92,7 +92,7 @@
     .to(S, { towns: 1, duration: .9, ease: 'none' }, 2.6)
     .to(S, { pulse: 1, duration: 1.3, ease: 'power2.out' }, 2.8)
     .from('.preload__caption > *', { y: 16, opacity: 0, stagger: .1, duration: .6 }, 2.4)
-    .to(cnt, { v: 34, duration: 1.1, ease: 'power2.out', onUpdate: () => { count.textContent = Math.round(cnt.v); } }, 2.6)
+    .to(cnt, { v: +count.dataset.n || 33, duration: 1.1, ease: 'power2.out', onUpdate: () => { count.textContent = Math.round(cnt.v); } }, 2.6)
     .to({}, { duration: .55 }); // пауза, чтобы карту успели разглядеть
 
   // карта нужна к 1.3 с; если данные не пришли — заставка идёт без карты
