@@ -20,7 +20,7 @@
     root.classList.add('a11y');
     a11yBtn.setAttribute('aria-pressed', 'true');
     if (window.ScrollTrigger) ScrollTrigger.getAll().forEach(st => st.kill());
-    if (window.gsap) { gsap.globalTimeline.clear(); gsap.set('[data-reveal], [data-reveal] > *, .split-line, main, .ftr, .hdr, .page-hero__bg img, .news-card__img img, .album__grid img, .person__photo img, .logos img, .btn, .ch', { clearProps: 'all' }); }
+    if (window.gsap) { gsap.globalTimeline.clear(); gsap.set('[data-reveal], [data-reveal] > *, .split-line, main, .ftr, .hdr, .page-hero__bg img, .news-card__img img, .album__grid img, .logos img, .btn, .ch', { clearProps: 'all' }); }
     document.getElementById('intro')?.remove();
     if (window.lenis) { window.lenis.destroy(); window.lenis = null; }
     document.dispatchEvent(new CustomEvent('ygs:a11y', { detail: { on: true } }));
@@ -229,7 +229,7 @@
   // ---------- Появление блоков ----------
   // data-reveal — сам элемент; data-reveal="group" — его дети по очереди; data-reveal="left|right|scale" — вариант.
   // Элементы без атрибута, перечисленные в AUTO, появляются сами — так motion есть на каждой странице.
-  const AUTO = '.rows__item, .tile, .kpi > div, .facts > div, .news-card, .doc, .docsec, .person, .logos li, .steps li, .tl, .prose > *, .form, .album__grid li, .vac, .req > div, .specs div, .zv__region, .zv__group, .cargo__list li, .news__list li, .partners__list li, .sitemap > li, .contacts-kpi > div, .work__row, .park, .video, .scheme, .calc, .org';
+  const AUTO = '.rows__item, .tile, .kpi > div, .facts > div, .news-card, .doc, .docsec, .logos li, .steps li, .tl, .prose > *, .form, .album__grid li, .vac, .req > div, .specs div, .zv__region, .zv__group, .cargo__list li, .news__list li, .partners__list li, .sitemap > li, .contacts-kpi > div, .work__row, .park, .video, .scheme, .calc, .org';
   document.querySelectorAll(AUTO).forEach(el => { if (!el.closest('[data-reveal]') && !el.hasAttribute('data-reveal')) el.setAttribute('data-reveal', 'auto'); });
   const seen = new Map(); // порядковый номер среди соседей — для каскада
   document.querySelectorAll('[data-reveal]').forEach(el => {
@@ -241,7 +241,7 @@
     gsap.from(targets, { ...from, duration: 0.9, stagger: 0.08, delay, ease: 'power3.out', clearProps: 'transform,opacity', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
   });
   // картинки в карточках: наезд при появлении
-  document.querySelectorAll('.news-card__img img, .album__grid img, .person__photo img, .logos img').forEach(img => {
+  document.querySelectorAll('.news-card__img img, .album__grid img, .logos img').forEach(img => {
     gsap.from(img, { scale: 1.18, duration: 1.4, ease: 'power3.out', scrollTrigger: { trigger: img, start: 'top 92%', once: true } });
   });
 

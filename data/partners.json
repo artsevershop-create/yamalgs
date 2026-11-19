@@ -12,11 +12,11 @@
     "logo": "files/partners/xw54ad29x12qu4mjy60nxzrtw2ntztkx.png"
   },
   {
-    "name": "АО \"Партнер\"",
+    "name": "АО «Партнер»",
     "logo": "files/partners/tzwqozui29zp31aog0hu179n5h1nlr2h.png"
   },
   {
-    "name": "ООО \"Уренгойдорстрой\"",
+    "name": "ООО «Уренгойдорстрой»",
     "logo": "files/partners/2nr9tf3j4wu5shms9shpptiguuu4mou9.png"
   },
   {
@@ -24,11 +24,27 @@
     "logo": "files/partners/632omhbea32u7obwthi1eyyosof5x0b7.jpg"
   },
   {
-    "name": "Акционерное общество \"Салехардэнерго\"",
+    "name": "АО «Салехардэнерго»",
     "logo": "files/partners/0pr1381robbz6i29npe9ter29vbc3ve7.jpg"
   },
   {
     "name": "Роснефть",
     "logo": "files/partners/7il0ushkbeayuah0dqyjzy8n1605z6rk.jpg"
+  },
+  {
+    "name": "АО «Омтранснефтепродукт»",
+    "logo": null
+  },
+  {
+    "name": "АО «Ямалкоммунэнерго»",
+    "logo": null
+  },
+  {
+    "name": "Аэропорт Салехард",
+    "logo": null
+  },
+  {
+    "name": "Авиакомпания «Ямал»",
+    "logo": null
   }
 ]

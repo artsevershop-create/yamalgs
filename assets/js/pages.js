@@ -113,3 +113,77 @@
     });
   }
 })();
+
+// ---------- Руководство: бейджи на лентах (качание, переворот по клику) ----------
+(function () {
+  const list = document.getElementById('lanyards');
+  if (!list) return;
+  const calm = () => window.ygsCalm ? window.ygsCalm() : matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const items = [...list.querySelectorAll('.lan')].map(el => ({ el, a: 0, v: 0, k: 26 + Math.random() * 6 }));
+  let raf = 0, last = 0, open = -1;
+
+  // маятник: затухающие колебания вокруг кольца на рейке
+  const step = now => {
+    const dt = Math.min(0.05, (now - (last || now)) / 1000) || 0.016; last = now;
+    let busy = false;
+    for (const it of items) {
+      it.v += (-it.k * it.a - 2.1 * it.v) * dt;
+      it.a = Math.max(-16, Math.min(16, it.a + it.v * dt));
+      if (Math.abs(it.a) < 0.02 && Math.abs(it.v) < 0.05) { it.a = 0; it.v = 0; } else busy = true;
+      it.el.style.setProperty('--sw', it.a.toFixed(3) + 'deg');
+    }
+    raf = busy ? requestAnimationFrame(step) : (last = 0);
+  };
+  const kick = () => { if (!raf || !last) { last = 0; raf = requestAnimationFrame(step); } };
+  const push = (i, amount, spread) => {
+    if (calm() || i < 0 || i >= items.length) return;
+    items[i].v += amount;
+    if (spread) { push(i - 1, amount * -0.3); push(i + 1, amount * -0.3); }
+    kick();
+  };
+
+  // при первом показе бейджи слегка раскачиваются по очереди
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => {
+    if (!es.some(e => e.isIntersecting)) return;
+    io.disconnect();
+    items.forEach((_, i) => setTimeout(() => push(i, (i % 2 ? -1 : 1) * (26 - (i % 4) * 3)), 80 + i * 90));
+  }, { threshold: 0.25 }) : null;
+  if (io) io.observe(list);
+
+  // навели курсор — бейдж разворачивается к зрителю и качается по ходу движения мыши
+  let lastX = 0, lastT = 0, hot = -1;
+  list.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse') return;
+    const li = e.target.closest('.lan');
+    const idx = li ? items.findIndex(it => it.el === li) : -1;
+    const now = performance.now(), vx = (e.clientX - lastX) / Math.max(1, now - lastT);
+    lastX = e.clientX; lastT = now;
+    if (idx === hot) return;
+    if (hot >= 0) items[hot].el.classList.remove('is-hot');
+    hot = idx;
+    if (idx >= 0 && e.target.closest('.lan__badge')) { items[idx].el.classList.add('is-hot'); push(idx, Math.max(-24, Math.min(24, -vx * 24)), true); } else hot = -1;
+  });
+  list.addEventListener('pointerleave', () => { if (hot >= 0) items[hot].el.classList.remove('is-hot'); hot = -1; });
+
+  const setFlip = (i, on, focusBack) => {
+    const it = items[i]; if (!it) return;
+    const li = it.el, front = li.querySelector('.lan__front'), back = li.querySelector('.lan__back');
+    li.classList.toggle('is-flip', on);
+    li.classList.remove('is-hot');
+    front.toggleAttribute('inert', on);
+    back.toggleAttribute('inert', !on);
+    li.querySelector('.lan__turn').setAttribute('aria-expanded', on ? 'true' : 'false');
+    if (on) { open = i; push(i, i % 2 ? 12 : -12, true); setTimeout(() => back.querySelector('a, button') && back.querySelector('a, button').focus({ preventScroll: true }), 420); }
+    else { if (open === i) open = -1; push(i, i % 2 ? -8 : 8, true); if (focusBack) li.querySelector('.lan__turn').focus({ preventScroll: true }); }
+  };
+  list.addEventListener('click', e => {
+    const li = e.target.closest('.lan'); if (!li) return;
+    const i = items.findIndex(it => it.el === li);
+    if (e.target.closest('.lan__turn')) { if (open >= 0 && open !== i) setFlip(open, false); setFlip(i, true); }
+    else if (e.target.closest('.lan__back-btn')) setFlip(i, false, true);
+  });
+  // тап по свободному месту и Esc возвращают бейдж обратно
+  document.addEventListener('pointerdown', e => { if (open >= 0 && !e.target.closest('.lan')) setFlip(open, false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && open >= 0) setFlip(open, false, true); });
+  list.addEventListener('focusin', e => { const li = e.target.closest('.lan'); if (li && e.target.matches('.lan__turn:focus-visible')) push(items.findIndex(it => it.el === li), 10); });
+})();

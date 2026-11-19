@@ -44,7 +44,7 @@
     const totalPlan = points.reduce((a, p) => a + p.plan, 0);
     const totalFact = points.reduce((a, p) => a + p.fact, 0);
     document.getElementById('zvSeason').textContent = data.season.replace(/\D/g, '');
-    document.getElementById('zvTotal').innerHTML = `Доставлено в посёлки <b>${fmt(totalFact)}</b> из ${fmt(totalPlan)} т — ${pct(totalFact, totalPlan)} %`;
+    document.getElementById('zvTotal').innerHTML = `Доставлено в посёлки на ${new Date(data.updated).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(/s*г.$/, '').replace(/ (d{4})$/, ' $1 года')}: <b>${fmt(totalFact)}</b> из ${fmt(totalPlan)} т — ${pct(totalFact, totalPlan)} %`;
     const upd = new Date(data.updated);
     document.getElementById('zvUpdated').textContent = 'Обновлено ' + upd.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(/\.$/, '') + '. Тонны, по данным оперативного графика завоза.';
 
