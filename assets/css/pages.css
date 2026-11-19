@@ -51,7 +51,7 @@
 
 /* схема базы */
 .scheme { position: relative; border-radius: 8px; overflow: hidden; background: #fff; }
-.scheme img { width: 100%; display: block; }
+.scheme img { width: 100%; height: auto; display: block; }
 .scheme__pt {
   position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%);
   width: 34px; height: 34px; border-radius: 50%; border: 0; cursor: pointer;
@@ -187,10 +187,10 @@ html.a11y .faq__item p { color: inherit; }
 html.a11y .ptable, html.a11y .parkmap > a { border: 1px solid #000; }
 
 /* схема базы на карте парка */
-.scheme--map { background: #fff; box-shadow: 0 20px 50px rgba(0,0,0,.25); }
+.scheme--map { background: #fff; box-shadow: 0 20px 50px rgba(0,0,0,.25); max-width: min(100%, 1040px); margin-inline: auto; }
 .scheme__pt--zone { background: #2F55D4; width: 34px; height: 34px; font-size: 14px; }
 .scheme__pt--zone:hover, .scheme__pt--zone.is-active { background: var(--night); }
-.scheme--map .scheme__pt { width: 24px; height: 24px; font-size: 11px; }
+.scheme--map .scheme__pt { width: 22px; height: 22px; font-size: 10px; }
 .scheme--map .scheme__pt--zone { width: 30px; height: 30px; font-size: 13px; }
 .mplan__list .link { display: inline-block; margin-top: 8px; font-size: 14px; }
 
